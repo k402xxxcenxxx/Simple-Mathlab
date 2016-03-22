@@ -48,7 +48,7 @@ public:
 	//讀取矩陣資料
 	bool LoadMatrixData();
 	//取得矩陣資料
-	std::vector<Vector> GetMatrices();
+	std::vector<Matrix> GetMatrices();
 	//設置檔案路徑名稱
 	void SetFileName(std::string fileName);
 };
