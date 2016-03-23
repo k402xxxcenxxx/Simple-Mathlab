@@ -40,11 +40,11 @@ bool DataManager::LoadVectorData()
 					//定義暫存向量資料結構
 					Vector tempVector;
 					//存入向量資料
-					tempVector.Data = tempVectorData;
+					tempVector.setData(tempVectorData);
 					//定義向量變數名稱，依VectorVariableIndex變數作名稱的控管
 					std::string vectorVariableTemp = "$v" + std::to_string(VectorVariableIndex);
 					//存入向量變數名稱
-					tempVector.Name = vectorVariableTemp;
+					tempVector.setName(vectorVariableTemp);
 					//存入向量
 					Vectors.push_back(tempVector);
 					//遞增VectorVariableIndex，以確保變數名稱不重複
@@ -69,9 +69,9 @@ bool DataManager::LoadVectorData()
 		}
 		//讀入輸入檔案中最後一個向量資訊
 		Vector tempVector;
-		tempVector.Data = tempVectorData;
+		tempVector.setData(tempVectorData);
 		std::string vectorVariableTemp = "$v" + std::to_string(VectorVariableIndex);
-		tempVector.Name = vectorVariableTemp;
+		tempVector.setName(vectorVariableTemp);
 		Vectors.push_back(tempVector);
 		VectorVariableIndex++;
 		//讀取成功回傳false
@@ -100,9 +100,9 @@ bool DataManager::LoadMatrixData()
 		int currentLoadMatrixID = 0;
 		int inputMatrixCount = 0;
 		//定義矩陣資料暫存變數
-		std::vector<std::vector<double>> tempMatrixData;
+		std::vector<Vector> tempMatrixData;
 		//定義矩陣資料暫存Row
-		std::vector<double> tempValues;
+		Vector tempValues;
 		//定義矩陣暫存column數量
 		int tempMatrixColNum = 0;
 		//定義矩陣暫存第N個column
@@ -113,13 +113,12 @@ bool DataManager::LoadMatrixData()
 		int tempMatrixRowIndex = 0;
 		//定義讀取檔案字串暫存變數
 		std::string tempString;
-		char* pEnd;
 		//從檔案讀取字串，取得矩陣總數
 		fin >> tempString;
 		inputMatrixCount = (int)strtod(tempString.c_str(), NULL);
 
 		//執行讀檔迴圈，並在讀到檔案結尾時結束，或是讀到指定數量的矩陣後結束
-		while (!fin.eof() || currentLoadMatrixID == inputMatrixCount)
+		while (!fin.eof())
 		{
 			//從檔案讀取字串
 			fin >> tempString;
@@ -128,39 +127,55 @@ bool DataManager::LoadMatrixData()
 			{
 				if (currentLoadMatrixID != 0)
 				{
+					//Row數目增加
+					tempMatrixRowIndex++;
+					//已經蒐集好的行加入最後結果
+					tempMatrixData.push_back(tempValues);
+					tempValues.getData().clear();
+					//設定為零
+					tempMatrixColIndex = 0;
+
 					//定義暫存矩陣資料結構
 					Matrix tempMatrix;
 					//存入矩陣資料
-					tempMatrix.Data = tempMatrixData;
+					tempMatrix.setData(tempMatrixData);
 					//定義矩陣變數名稱，依MatrixVariableIndex變數作名稱的控管
 					std::string matrixVariableTemp = "$m" + std::to_string(MatrixVariableIndex);
 					//存入矩陣變數名稱
-					tempMatrix.Name = matrixVariableTemp;
+					tempMatrix.setName(matrixVariableTemp);
 					//存入矩陣
 					Matrices.push_back(tempMatrix);
+
+					Matrices[MatrixVariableIndex].setcolNum(tempMatrixColNum);
+					Matrices[MatrixVariableIndex].setrowNum(tempMatrixRowNum);
 					//遞增MatrixVariableIndex，以確保變數名稱不重複
 					MatrixVariableIndex++;
 					//清除矩陣資料暫存
 					tempMatrixData.clear();
+					tempValues.getData().clear();
+
+					tempMatrixColIndex = 0;
+					tempMatrixRowIndex = 0;
 				}
 				//遞增currentLoadMatrixID，標記到當前讀取矩陣ID
 				currentLoadMatrixID++;
 				//從檔案讀取字串，取得矩陣維度
 				fin >> tempString;
+				tempMatrixColNum = (int)strtod(tempString.c_str(), NULL);
 
-				tempMatrixColNum = (int)strtod(tempString.c_str(), &pEnd);
-				tempMatrixRowNum = (int)strtod(pEnd, NULL);
+				fin >> tempString;
+				tempMatrixRowNum = (int)strtod(tempString.c_str(), NULL);
 			}
 			else
 			{
-				tempMatrixColIndex++;
-				//換行了
+				
+				//如果column大於原先設定則代表換行了
 				if (tempMatrixColIndex >= tempMatrixColNum) {
 					//Row數目增加
 					tempMatrixRowIndex++;
 					//已經蒐集好的行加入最後結果
 					tempMatrixData.push_back(tempValues);
-					tempValues.clear();
+					tempValues.getData().clear();
 					//設定為零
 					tempMatrixColIndex = 0;
 				}
@@ -169,17 +184,33 @@ bool DataManager::LoadMatrixData()
 				double value;
 				value = (double)strtod(tempString.c_str(), NULL);
 				//將矩陣資料存入暫存
-				tempValues.push_back(value);
+				tempValues.getData().push_back(value);
+				//新增一個column
+				tempMatrixColIndex++;
 
 			}
 
 		}
+
+		//Row數目增加
+		tempMatrixRowIndex++;
+		//已經蒐集好的行加入最後結果
+		tempMatrixData.push_back(tempValues);
+		tempValues.getData().clear();
+		//設定為零
+		tempMatrixColIndex = 0;
+
 		//讀入輸入檔案中最後一個向量資訊
 		Matrix tempMatrix;
-		tempMatrix.Data = tempMatrixData;
+		tempMatrix.setData(tempMatrixData);
 		std::string matrixVariableTemp = "$m" + std::to_string(MatrixVariableIndex);
-		tempMatrix.Name = matrixVariableTemp;
+		tempMatrix.setName(matrixVariableTemp);
+		tempMatrix.setcolNum(tempMatrixColNum);
+		tempMatrix.setrowNum(tempMatrixRowNum);
 		Matrices.push_back(tempMatrix);
+
+		int num = tempMatrix.getrowNum();
+
 		MatrixVariableIndex++;
 		//讀取成功回傳false
 		return true;
@@ -195,4 +226,30 @@ void DataManager::SetFileName(std::string fileName)
 {
 	FileName = fileName;
 }
+
+std::string Matrix::print() {
+	std::string outputTemp = " [";
+	//將輸出資料存入暫存
+	for (int j = 0; j < getrowNum(); j++)
+	{
+		outputTemp += " [";
+		for (int k = 0; k < getcolNum(); k++)
+		{
+			std::string scalarString = std::to_string(getData()[j].getData()[k]);
+			outputTemp += scalarString.substr(0, scalarString.size() - 5);
+			if (k != getcolNum() - 1)
+				outputTemp += ",";
+		}
+		outputTemp += "]";
+		outputTemp += "\n";
+
+		if (j != getrowNum() - 1)
+			outputTemp += ",";
+	}
+	//將輸出格式存入暫存，並且換行
+	outputTemp += "]\n";
+
+	return outputTemp;
+}
+
 

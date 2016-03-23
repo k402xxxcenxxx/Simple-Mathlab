@@ -3,22 +3,51 @@
 #include<iostream>
 #include<fstream>
 #include<string>
+#include<numeric>
 //定義向量資料結構
-struct Vector
+class Vector
 {
+private:
 	std::string Name;
 	std::vector<double> Data;
+public:
+	std::string getName() { return Name; }
+	std::vector<double> getData() { return Data; }
+
+	void setName(std::string myName) { Name = myName; }
+	void setData(std::vector<double> myData) { Data = myData; }
+
+	static double dot(Vector V1, Vector V2) {
+		double result = 0;
+		for (int i = 0; i < V1.getData().size();i++) {
+			result += V1.getData()[i] * V2.getData()[i];
+		}
+
+		return result;
+	}
 };
 
 //定義向量資料結構
-struct Matrix
+class Matrix
 {
+private:
 	std::string Name;
-	std::vector<std::vector<double>> Data;
-
+	std::vector<Vector> Data;
 	int colNum;
 	int rowNum;
+public:
+	std::string getName() { return Name; }
+	std::vector<Vector> getData() { return Data; }
+	int getcolNum() { return colNum; }
+	int getrowNum() { return rowNum; }
 
+	void setName(std::string myName) { Name = myName; }
+	void setData(std::vector<Vector> myData) { Data = myData; }
+	void setcolNum(int mycolNum) { colNum = mycolNum; }
+	void setrowNum(int myrowNum) { rowNum = myrowNum; }
+
+	std::string print();
+	Matrix dot(Matrix M1, Matrix M2);
 };
 
 //定義控管資料class
