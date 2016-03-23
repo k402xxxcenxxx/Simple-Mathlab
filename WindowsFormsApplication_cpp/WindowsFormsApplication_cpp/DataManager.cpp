@@ -227,6 +227,74 @@ void DataManager::SetFileName(std::string fileName)
 	FileName = fileName;
 }
 
+std::string Vector::print() {
+	//將輸出格式存入暫存
+	std::string outputTemp = "[";
+	//將輸出資料存入暫存
+	for (unsigned int j = 0; j < getData().size(); j++)
+	{
+		std::string scalarString = std::to_string(getData()[j]);
+		outputTemp += scalarString.substr(0, scalarString.size() - 5);
+		if (j != getData().size() - 1)
+			outputTemp += ",";
+	}
+	//將輸出格式存入暫存，並且換行
+	outputTemp += "]";
+
+	return outputTemp;
+}
+
+double Vector::dot(Vector V1, Vector V2) {
+	double result = 0;
+	for (int i = 0; i < V1.getData().size(); i++) {
+		result += V1.getData()[i] * V2.getData()[i];
+	}
+
+	return result;
+}
+
+Vector Vector::add(Vector V1, Vector V2) {
+	Vector result;
+
+	std::vector<double> tempVector;
+	for (int i = 0; i < V1.getData().size(); i++) {
+		tempVector.push_back(V1.getData()[i] + V2.getData()[i]);
+	}
+
+	result.setData(tempVector);
+	return result;
+}
+
+Vector Vector::scale(Vector V, double value) {
+	Vector result;
+
+	std::vector<double> tempVector;
+	for (int i = 0; i < V.getData().size(); i++) {
+		tempVector.push_back(V.getData()[i] * value);
+	}
+
+	result.setData(tempVector);
+	return result;
+}
+
+double Vector::norm(Vector V) {
+	double result = 0;
+	for (int i = 0; i < V.getData().size(); i++) {
+		result += V.getData()[i] * V.getData()[i];
+	}
+
+	result = sqrt(result);
+
+	return result;
+};
+
+Vector Vector::normalization(Vector V) {
+	double norm = 1 / Vector::norm(V);
+	Vector result = Vector::scale(V,norm);
+
+	return result;
+}
+
 std::string Matrix::print() {
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存

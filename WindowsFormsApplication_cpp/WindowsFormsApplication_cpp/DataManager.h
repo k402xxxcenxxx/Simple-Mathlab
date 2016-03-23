@@ -17,14 +17,13 @@ public:
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<double> myData) { Data = myData; }
 
-	static double dot(Vector V1, Vector V2) {
-		double result = 0;
-		for (int i = 0; i < V1.getData().size();i++) {
-			result += V1.getData()[i] * V2.getData()[i];
-		}
+	std::string print();
 
-		return result;
-	}
+	static double dot(Vector V1, Vector V2);
+	static Vector add(Vector V1, Vector V2);
+	static Vector scale(Vector V, double value);
+	static double norm(Vector V);
+	static Vector normalization(Vector V);
 };
 
 //定義向量資料結構

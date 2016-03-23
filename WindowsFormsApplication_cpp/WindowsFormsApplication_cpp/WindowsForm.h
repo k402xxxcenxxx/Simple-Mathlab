@@ -355,17 +355,8 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				//若變數名稱與指令變數名稱符合
 				if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
 				{
-					//將輸出格式存入暫存
-					outputTemp += "[";
-					//將輸出資料存入暫存
-					for (unsigned int j = 0; j<vectors[i].getData().size(); j++)
-					{
-						outputTemp += vectors[i].getData()[j].ToString();
-						if (j != vectors[i].getData().size() - 1)
-							outputTemp += ",";
-					}
-					//將輸出格式存入暫存，並且換行
-					outputTemp += "]" + Environment::NewLine;
+					
+					outputTemp = gcnew String(vectors[i].print().c_str()) + Environment::NewLine;
 					//輸出暫存資訊
 					Output->Text += gcnew String(vectors[i].getName().c_str()) +" = "+ outputTemp;
 					break;
@@ -443,12 +434,219 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 						Output->Text += gcnew String(Vfirst.getName().c_str()) + " dot " + gcnew String(Vsecond.getName().c_str()) + " = " + Vector::dot(Vfirst, Vsecond).ToString() + Environment::NewLine;
 					}
 					else {
-						Output->Text += gcnew String(Vfirst.getName().c_str()) + " dot " + gcnew String(Vsecond.getName().c_str()) + "can't do dot" + Environment::NewLine;
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " & " + gcnew String(Vsecond.getName().c_str()) + "can't do dot" + Environment::NewLine;
 					}
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
 				}
 			}
 			else {
-				Output->Text += "-Too much input for dot function-" + Environment::NewLine;
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for dot function-" + Environment::NewLine;
+				}else if (userCommand->Length < 3) {
+					Output->Text += "-Too less input for dot function-" + Environment::NewLine;
+				}
+			}
+		}
+		else if (userCommand[0] == "add") {
+			//是否只輸入兩個參數
+			if (userCommand->Length == 3) {
+
+				bool existInVector = false;
+				bool finished = false;
+				Vector Vfirst;
+				Vector Vsecond;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						existInVector = true;
+						break;
+					}
+				}
+
+				//如果第一個是向量，才再找第二個
+				if (existInVector) {
+					for (unsigned int i = 0; i < vectors.size(); i++)
+					{
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[2] == gcnew String(vectors[i].getName().c_str()))
+						{
+							Vsecond = vectors[i];
+							finished = true;
+							break;
+						}
+					}
+				}
+				else if (!existInVector) {
+					//透過for迴圈，從矩陣資料中找出對應變數
+					for (unsigned int i = 0; i < matrices.size(); i++)
+					{
+
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+						{
+
+							break;
+						}
+					}
+				}
+
+				if (finished && existInVector) {
+					if (Vfirst.getData().size() == Vsecond.getData().size()) {
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " add " + gcnew String(Vsecond.getName().c_str()) + " = " + gcnew String(Vector::add(Vfirst, Vsecond).print().c_str()) + Environment::NewLine;
+					}
+					else {
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " & " + gcnew String(Vsecond.getName().c_str()) + "can't do add" + Environment::NewLine;
+					}
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for add function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+				}
+			}
+		}
+		else if (userCommand[0] == "scale") {
+			//是否只輸入兩個參數
+			if (userCommand->Length == 3) {
+
+				bool existInVector = false;
+				bool finished = false;
+				Vector Vfirst;
+				double value;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						existInVector = true;
+						break;
+					}
+				}
+				if (existInVector) {
+					//若變數名稱與指令變數名稱符合
+					if (double::TryParse(userCommand[2],value))
+					{
+						finished = true;
+					}
+				}
+				else if (!existInVector) {
+					//透過for迴圈，從矩陣資料中找出對應變數
+					for (unsigned int i = 0; i < matrices.size(); i++)
+					{
+
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+						{
+
+							break;
+						}
+					}
+				}
+
+				if (finished && existInVector) {
+					Output->Text += gcnew String(Vfirst.getName().c_str()) + " scale " + value + " = " + gcnew String(Vector::scale(Vfirst, value).print().c_str()) + Environment::NewLine;
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for scale function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too less input for scale function-" + Environment::NewLine;
+				}
+			}
+		}
+		else if (userCommand[0] == "norm") {
+			//是否只輸入一個參數
+			if (userCommand->Length == 2) {
+
+				bool finished = false;
+				Vector Vfirst;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						finished = true;
+						break;
+					}
+				}
+
+				if (finished) {
+					Output->Text += gcnew String(Vfirst.getName().c_str()) + " norm = " + Vector::norm(Vfirst) + Environment::NewLine;
+				}
+				else {
+					Output->Text += "-No such vector-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 2) {
+					Output->Text += "-Too much input for norm function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 2) {
+					Output->Text += "-Too less input for norm function-" + Environment::NewLine;
+				}
+			}
+		}
+		else if (userCommand[0] == "normalize") {
+			//是否只輸入一個參數
+			if (userCommand->Length == 2) {
+
+				bool finished = false;
+				Vector Vfirst;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						finished = true;
+						break;
+					}
+				}
+
+				if (finished) {
+					Output->Text += gcnew String(Vfirst.getName().c_str()) + " normalize = " + gcnew String(Vector::normalization(Vfirst).print().c_str()) + Environment::NewLine;
+				}
+				else {
+					Output->Text += "-No such vector-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 2) {
+					Output->Text += "-Too much input for normalize function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 2) {
+					Output->Text += "-Too less input for normalize function-" + Environment::NewLine;
+				}
 			}
 		}
 		//反之則判斷找不到指令
