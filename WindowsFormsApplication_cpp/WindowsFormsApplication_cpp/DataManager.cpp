@@ -27,11 +27,13 @@ bool DataManager::LoadVectorData()
 		//從檔案讀取字串，解析掉向量總數
 		fin >> tempString;
 		
+		//從檔案讀取字串
+		fin >> tempString;
+		
 		//執行讀檔迴圈，並在讀到檔案結尾時結束
 		while (!fin.eof())
 		{
-			//從檔案讀取字串
-			fin >> tempString;
+			
 			//解析到向量標記"V"
 			if (tempString == "V")
 			{
@@ -56,6 +58,8 @@ bool DataManager::LoadVectorData()
 				currentLoadVectorID++;
 				//從檔案讀取字串，解析掉向量維度
 				fin >> tempString;
+				//從檔案讀取字串
+				fin >> tempString;
 			}
 			else
 			{
@@ -63,7 +67,12 @@ bool DataManager::LoadVectorData()
 				double value;
 				value = (double)strtod(tempString.c_str(), NULL);
 				//將向量資料存入暫存
+
+				std::cout << "vector [" << VectorVariableIndex << "]" <<"pushback value ("<< value<< ")" << std::endl;
 				tempVectorData.push_back(value);
+
+				//從檔案讀取字串
+				fin >> tempString;
 			}
 			
 		}
@@ -324,6 +333,10 @@ Vector Vector::crossProduct(Vector V1, Vector V2) {
 	result.setData(tempVector);
 
 	return result;
+}
+
+Vector Vector::planeNormal(Vector V1, Vector V2) {
+	return crossProduct(V1, V2);
 }
 
 double Vector::angle(Vector V1, Vector V2) {

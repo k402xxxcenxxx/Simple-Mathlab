@@ -29,6 +29,7 @@ public:
 	static Vector normalization(Vector V);
 	static bool isOrthogonal(Vector V1, Vector V2);
 	static Vector crossProduct(Vector V1, Vector V2);
+	static Vector planeNormal(Vector V1, Vector V2);
 	static double angle(Vector V1, Vector V2);
 };
 
