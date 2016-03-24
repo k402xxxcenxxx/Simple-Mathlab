@@ -24,6 +24,7 @@ public:
 	static Vector scale(Vector V, double value);
 	static double norm(Vector V);
 	static Vector normalization(Vector V);
+	static bool isOrthogonal(Vector V1, Vector V2);
 };
 
 //定義向量資料結構

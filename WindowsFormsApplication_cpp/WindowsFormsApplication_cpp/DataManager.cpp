@@ -295,6 +295,12 @@ Vector Vector::normalization(Vector V) {
 	return result;
 }
 
+bool Vector::isOrthogonal(Vector V1, Vector V2) {
+	//Two nonzero vectors a and b are orthogonal if and only if a dot b = 0.
+
+	return Vector::dot(V1, V2) == 0;
+}
+
 std::string Matrix::print() {
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存

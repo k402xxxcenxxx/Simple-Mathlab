@@ -649,6 +649,80 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				}
 			}
 		}
+		else if (userCommand[0] == "isOrthogonal") {
+			//是否只輸入兩個參數
+			if (userCommand->Length == 3) {
+
+				bool existInVector = false;
+				bool finished = false;
+				Vector Vfirst;
+				Vector Vsecond;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						existInVector = true;
+						break;
+					}
+				}
+
+				//如果第一個是向量，才再找第二個
+				if (existInVector) {
+					for (unsigned int i = 0; i < vectors.size(); i++)
+					{
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[2] == gcnew String(vectors[i].getName().c_str()))
+						{
+							Vsecond = vectors[i];
+							finished = true;
+							break;
+						}
+					}
+				}
+				else if (!existInVector) {
+					//透過for迴圈，從矩陣資料中找出對應變數
+					for (unsigned int i = 0; i < matrices.size(); i++)
+					{
+
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+						{
+
+							break;
+						}
+					}
+				}
+
+				if (finished && existInVector) {
+					if (Vfirst.getData().size() == Vsecond.getData().size()) {
+						if (Vector::isOrthogonal(Vfirst, Vsecond)) {
+							Output->Text += "true" + Environment::NewLine;
+						}else{
+							Output->Text += "false" + Environment::NewLine;
+						}
+					}
+					else {
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " & " + gcnew String(Vsecond.getName().c_str()) + "can't judge orthogonal" + Environment::NewLine;
+					}
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for add function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+				}
+			}
+		}
 		//反之則判斷找不到指令
 		else
 		{
