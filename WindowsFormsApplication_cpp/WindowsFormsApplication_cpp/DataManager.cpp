@@ -301,6 +301,15 @@ bool Vector::isOrthogonal(Vector V1, Vector V2) {
 	return Vector::dot(V1, V2) == 0;
 }
 
+double Vector::angle(Vector V1, Vector V2) {
+	double cosValue = Vector::dot(V1, V2) / (Vector::norm(V1) * Vector::norm(V2));
+	double result = acos(cosValue);
+	
+	result = result / 3.1415926 * 180;
+
+	return result;
+}
+
 std::string Matrix::print() {
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存

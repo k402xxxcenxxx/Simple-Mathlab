@@ -25,6 +25,7 @@ public:
 	static double norm(Vector V);
 	static Vector normalization(Vector V);
 	static bool isOrthogonal(Vector V1, Vector V2);
+	static double angle(Vector V1, Vector V2);
 };
 
 //定義向量資料結構
