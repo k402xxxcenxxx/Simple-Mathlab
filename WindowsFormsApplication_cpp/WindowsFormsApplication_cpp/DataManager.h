@@ -17,6 +17,9 @@ public:
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<double> myData) { Data = myData; }
 
+	void push_back(double value) { Data.push_back(value); }
+	void clear() { Data.clear(); }
+
 	std::string print();
 
 	static double dot(Vector V1, Vector V2);
@@ -25,6 +28,7 @@ public:
 	static double norm(Vector V);
 	static Vector normalization(Vector V);
 	static bool isOrthogonal(Vector V1, Vector V2);
+	static Vector crossProduct(Vector V1, Vector V2);
 	static double angle(Vector V1, Vector V2);
 };
 
@@ -39,6 +43,7 @@ private:
 public:
 	std::string getName() { return Name; }
 	std::vector<Vector> getData() { return Data; }
+	Vector getData(int rowNum) { return Data.at(rowNum); }
 	int getcolNum() { return colNum; }
 	int getrowNum() { return rowNum; }
 
@@ -48,7 +53,6 @@ public:
 	void setrowNum(int myrowNum) { rowNum = myrowNum; }
 
 	std::string print();
-	Matrix dot(Matrix M1, Matrix M2);
 };
 
 //定義控管資料class

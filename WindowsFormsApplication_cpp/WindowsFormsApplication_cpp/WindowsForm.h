@@ -224,6 +224,7 @@ namespace WindowsFormsApplication_cpp {
 			// VectorList
 			// 
 			this->VectorList->FormattingEnabled = true;
+			this->VectorList->HorizontalScrollbar = true;
 			this->VectorList->ItemHeight = 12;
 			this->VectorList->Location = System::Drawing::Point(3, 313);
 			this->VectorList->Name = L"VectorList";
@@ -793,6 +794,76 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				}
 			}
 		}
+		else if (userCommand[0] == "cross") {
+			//是否只輸入兩個參數
+			if (userCommand->Length == 3) {
+
+				bool existInVector = false;
+				bool finished = false;
+				Vector Vfirst;
+				Vector Vsecond;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vfirst = vectors[i];
+						existInVector = true;
+						break;
+					}
+				}
+
+				//如果第一個是向量，才再找第二個
+				if (existInVector) {
+					for (unsigned int i = 0; i < vectors.size(); i++)
+					{
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[2] == gcnew String(vectors[i].getName().c_str()))
+						{
+							Vsecond = vectors[i];
+							finished = true;
+							break;
+						}
+					}
+				}
+				else if (!existInVector) {
+					//透過for迴圈，從矩陣資料中找出對應變數
+					for (unsigned int i = 0; i < matrices.size(); i++)
+					{
+
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+						{
+
+							break;
+						}
+					}
+				}
+
+				if (finished && existInVector) {
+					if (Vfirst.getData().size() == Vsecond.getData().size() && Vfirst.getData().size() == 3) {
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " cross " + gcnew String(Vsecond.getName().c_str()) + " = " + gcnew String(Vector::crossProduct(Vfirst, Vsecond).print().c_str()) + Environment::NewLine;
+					}
+					else {
+						Output->Text += gcnew String(Vfirst.getName().c_str()) + " & " + gcnew String(Vsecond.getName().c_str()) + "can't do cross" + Environment::NewLine;
+					}
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for add function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+				}
+			}
+		}
 		//反之則判斷找不到指令
 		else
 		{
@@ -868,7 +939,7 @@ private: System::Void openFileDialog2_FileOk(System::Object^  sender, System::Co
 		//取得所有向量資料
 		std::vector<Matrix> matrices = dataManager->GetMatrices();
 
-		for (unsigned int i = 0; i < matrices.size(); i++)
+		for (int i = 0; i < matrices.size(); i++)
 		{
 			//將檔案名稱存入暫存
 			std::string tempString = matrices[i].getName();
@@ -880,8 +951,8 @@ private: System::Void openFileDialog2_FileOk(System::Object^  sender, System::Co
 				tempString += " [";
 				for (int k = 0; k < matrices[i].getcolNum(); k++)
 				{
-					std::string scalarString = std::to_string(matrices[i].getData()[j].getData()[k]);
-					tempString += scalarString.substr(0, scalarString.size()-5);
+					std::string scalarString = std::to_string((matrices[i].getData().at(j)).getData().at(k));
+					tempString += scalarString.substr(0, scalarString.size() - 5);
 					if (k != matrices[i].getcolNum() - 1)
 						tempString += ",";
 				}

@@ -74,6 +74,7 @@ bool DataManager::LoadVectorData()
 		tempVector.setName(vectorVariableTemp);
 		Vectors.push_back(tempVector);
 		VectorVariableIndex++;
+		tempVectorData.clear();
 		//讀取成功回傳false
 		return true;
 	}
@@ -102,7 +103,7 @@ bool DataManager::LoadMatrixData()
 		//定義矩陣資料暫存變數
 		std::vector<Vector> tempMatrixData;
 		//定義矩陣資料暫存Row
-		Vector tempValues;
+		Vector tempVector;
 		//定義矩陣暫存column數量
 		int tempMatrixColNum = 0;
 		//定義矩陣暫存第N個column
@@ -127,11 +128,15 @@ bool DataManager::LoadMatrixData()
 			{
 				if (currentLoadMatrixID != 0)
 				{
+					
+					//已經蒐集好的行加入最後結果
+					tempVector.setName("$m" + std::to_string(MatrixVariableIndex) + "[" + std::to_string(tempMatrixRowIndex) + "]");
+					tempMatrixData.push_back(tempVector);
+
 					//Row數目增加
 					tempMatrixRowIndex++;
-					//已經蒐集好的行加入最後結果
-					tempMatrixData.push_back(tempValues);
-					tempValues.getData().clear();
+
+					tempVector.clear();
 					//設定為零
 					tempMatrixColIndex = 0;
 
@@ -152,7 +157,7 @@ bool DataManager::LoadMatrixData()
 					MatrixVariableIndex++;
 					//清除矩陣資料暫存
 					tempMatrixData.clear();
-					tempValues.getData().clear();
+					tempVector.clear();
 
 					tempMatrixColIndex = 0;
 					tempMatrixRowIndex = 0;
@@ -165,17 +170,26 @@ bool DataManager::LoadMatrixData()
 
 				fin >> tempString;
 				tempMatrixRowNum = (int)strtod(tempString.c_str(), NULL);
+
+				tempMatrixColNum = tempMatrixColNum;
+
+				tempMatrixRowNum = tempMatrixRowNum;
 			}
 			else
 			{
 				
 				//如果column大於原先設定則代表換行了
 				if (tempMatrixColIndex >= tempMatrixColNum) {
+					
+					//已經蒐集好的行加入最後結果
+					tempVector.setName("$m" + std::to_string(MatrixVariableIndex) + "[" + std::to_string(tempMatrixRowIndex) + "]");
+					tempMatrixData.push_back(tempVector);
+
 					//Row數目增加
 					tempMatrixRowIndex++;
-					//已經蒐集好的行加入最後結果
-					tempMatrixData.push_back(tempValues);
-					tempValues.getData().clear();
+					int num = tempMatrixData.size();
+					num = num;
+					tempVector.clear();
 					//設定為零
 					tempMatrixColIndex = 0;
 				}
@@ -184,7 +198,7 @@ bool DataManager::LoadMatrixData()
 				double value;
 				value = (double)strtod(tempString.c_str(), NULL);
 				//將矩陣資料存入暫存
-				tempValues.getData().push_back(value);
+				tempVector.push_back(value);
 				//新增一個column
 				tempMatrixColIndex++;
 
@@ -195,8 +209,8 @@ bool DataManager::LoadMatrixData()
 		//Row數目增加
 		tempMatrixRowIndex++;
 		//已經蒐集好的行加入最後結果
-		tempMatrixData.push_back(tempValues);
-		tempValues.getData().clear();
+		tempMatrixData.push_back(tempVector);
+		tempVector.clear();
 		//設定為零
 		tempMatrixColIndex = 0;
 
@@ -208,8 +222,6 @@ bool DataManager::LoadMatrixData()
 		tempMatrix.setcolNum(tempMatrixColNum);
 		tempMatrix.setrowNum(tempMatrixRowNum);
 		Matrices.push_back(tempMatrix);
-
-		int num = tempMatrix.getrowNum();
 
 		MatrixVariableIndex++;
 		//讀取成功回傳false
@@ -267,8 +279,8 @@ Vector Vector::add(Vector V1, Vector V2) {
 
 Vector Vector::scale(Vector V, double value) {
 	Vector result;
-
 	std::vector<double> tempVector;
+
 	for (int i = 0; i < V.getData().size(); i++) {
 		tempVector.push_back(V.getData()[i] * value);
 	}
@@ -299,6 +311,19 @@ bool Vector::isOrthogonal(Vector V1, Vector V2) {
 	//Two nonzero vectors a and b are orthogonal if and only if a dot b = 0.
 
 	return Vector::dot(V1, V2) == 0;
+}
+
+Vector Vector::crossProduct(Vector V1, Vector V2) {
+	Vector result;
+	std::vector<double> tempVector;
+	
+	tempVector.push_back(V1.getData()[1] * V2.getData()[2] - V1.getData()[2] * V2.getData()[1]);
+	tempVector.push_back(-1 * ( V1.getData()[0] * V2.getData()[2] - V1.getData()[2] * V2.getData()[0] ));
+	tempVector.push_back(V1.getData()[0] * V2.getData()[1] - V1.getData()[1] * V2.getData()[0]);
+	
+	result.setData(tempVector);
+
+	return result;
 }
 
 double Vector::angle(Vector V1, Vector V2) {
