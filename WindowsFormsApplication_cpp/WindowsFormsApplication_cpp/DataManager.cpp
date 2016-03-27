@@ -251,7 +251,7 @@ std::string Vector::print() {
 	for (unsigned int j = 0; j < getData().size(); j++)
 	{
 		std::string scalarString = std::to_string(getData()[j]);
-		outputTemp += scalarString.substr(0, scalarString.size() - 5);
+		outputTemp += scalarString.substr(0, scalarString.size());
 		if (j != getData().size() - 1)
 			outputTemp += ",";
 	}
@@ -420,6 +420,30 @@ double Vector::determine(std::vector<Vector> Vs, int n) {
 	//做完就可以用斜角相乘，得到determine
 	for (int i = 0; i < n; i++) {
 		result *= Vs[i].getData()[i];
+	}
+
+	return result;
+}
+
+std::vector<Vector> Vector::basis(std::vector<Vector> Vs, int n) {
+	std::vector<Vector> result;
+
+	//首先，第一個向量不用算
+	//不過順手正規化
+	result.push_back(Vector::normalization(Vs[0]));
+
+	//接下來每個向量都跟前面向量做處理
+	for (int i = 1; i < n; i++) {
+		for (int j = i - 1; j >= 0; j--) {
+			//前面的向量
+			Vector tempV = Vs[j];
+			//上一個向量乘上dot除以長度
+			//因為等一下要做相減，所以乘上-1
+			tempV = Vector::scale(tempV, -1 * Vector::dot(Vs[i], tempV) / Vector::dot(tempV, tempV));
+			Vs[i] = Vector::add(Vs[i], tempV);
+		}
+
+		result.push_back(Vector::normalization(Vs[i]));
 	}
 
 	return result;

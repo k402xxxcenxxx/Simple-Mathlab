@@ -365,9 +365,9 @@ namespace WindowsFormsApplication_cpp {
 			this->listBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 12;
-			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(11) {
+			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(12) {
 				L"print", L"dot", L"add", L"scale", L"norm", L"normalize",
-					L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine"
+					L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis"
 			});
 			this->listBox1->Location = System::Drawing::Point(3, 18);
 			this->listBox1->Name = L"listBox1";
@@ -545,7 +545,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				if (userCommand->Length > 3) {
 					Output->Text += "-Too much input for dot function-" + Environment::NewLine;
 				}else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for dot function-" + Environment::NewLine;
+					Output->Text += "-Too few input for dot function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -615,7 +615,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for add function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -673,7 +673,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for scale function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for scale function-" + Environment::NewLine;
+					Output->Text += "-Too few input for scale function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -709,7 +709,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for norm function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 2) {
-					Output->Text += "-Too less input for norm function-" + Environment::NewLine;
+					Output->Text += "-Too few input for norm function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -745,7 +745,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for normalize function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 2) {
-					Output->Text += "-Too less input for normalize function-" + Environment::NewLine;
+					Output->Text += "-Too few input for normalize function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -819,7 +819,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for add function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -889,7 +889,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for add function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -959,7 +959,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for add function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -1029,7 +1029,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Too much input for add function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
 				}
 			}
 		}
@@ -1133,7 +1133,88 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				}
 
 			}else if (userCommand->Length < 2) {
-				Output->Text += "-Too less input for determine function-" + Environment::NewLine;
+				Output->Text += "-Too few input for determine function-" + Environment::NewLine;
+			}
+		}
+		else if (userCommand[0] == "basis") {
+			//是否輸入超過兩個參數
+			//如果是做向量的determine，輸入的數量至少三個
+			if (userCommand->Length >= 3) {
+				//n = ?
+				int dimension = 0;
+				//是否為向量
+				bool existInVector = false;
+				bool finished = false;
+				std::vector<Vector> Vlist;
+				//確認第一個是否是向量
+				//透過for迴圈，從向量資料中找出對應變數
+				for (unsigned int i = 0; i < vectors.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(vectors[i].getName().c_str()))
+					{
+						Vlist.push_back(vectors[i]);
+						existInVector = true;
+						dimension = vectors[i].getData().size();
+						break;
+					}
+				}
+
+				//如果第一個是向量，才往之後的找
+				if (existInVector) {
+					//因為只有n*n矩陣，所以只找n次
+					for (int i = 1; i < dimension; i++) {
+						//是否有在list中找到
+						bool exist = false;
+						for (unsigned int j = 0; j < vectors.size() && !exist; j++)
+						{
+
+							//若變數名稱與接下來的指令變數名稱符合
+							if (userCommand[i + 1] == gcnew String(vectors[j].getName().c_str()))
+							{
+								//size跟維度相同才能繼續做
+								if (vectors[j].getData().size() == dimension) {
+									exist = true;
+									Vlist.push_back(vectors[j]);
+									break;
+								}
+								else {
+									Output->Text += "-input set of vectors can't do dimension-" + Environment::NewLine;
+									return;
+								}
+							}
+						}
+
+						//如果其中某個vector找不到也不用做了
+						if (!exist) {
+							Output->Text += "-input set of vectors contain invalid vector-" + Environment::NewLine;
+							return;
+						}
+					}
+
+					//完成所有的存入
+					finished = true;
+
+				}
+
+
+				if (finished && existInVector) {
+					Vlist = Vector::basis(Vlist, dimension);
+					std::cout << "basis vector" << std::endl;
+					Output->Text += "basis vector = " + Environment::NewLine;
+					for (int i = 0; i < Vlist.size(); i++) {
+						String^ outputTemp = gcnew String(Vlist[i].print().c_str()) + Environment::NewLine;
+						Output->Text += outputTemp;
+					}
+
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else{
+				Output->Text += "-Too few input for determine function-" + Environment::NewLine;
 			}
 		}
 		//反之則判斷找不到指令
