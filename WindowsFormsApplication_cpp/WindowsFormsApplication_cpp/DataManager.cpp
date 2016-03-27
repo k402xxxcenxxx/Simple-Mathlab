@@ -27,12 +27,12 @@ bool DataManager::LoadVectorData()
 		//從檔案讀取字串，解析掉向量總數
 		fin >> tempString;
 		
-		//從檔案讀取字串
-		fin >> tempString;
-		
 		//執行讀檔迴圈，並在讀到檔案結尾時結束
-		while (!fin.eof())
+		while (fin >> tempString)
 		{
+
+			//從檔案讀取字串
+			//fin >> tempString;
 			
 			//解析到向量標記"V"
 			if (tempString == "V")
@@ -58,10 +58,8 @@ bool DataManager::LoadVectorData()
 				currentLoadVectorID++;
 				//從檔案讀取字串，解析掉向量維度
 				fin >> tempString;
-				//從檔案讀取字串
-				fin >> tempString;
 			}
-			else
+			else 
 			{
 				//讀取向量資料，並將string轉為double
 				double value;
@@ -71,8 +69,6 @@ bool DataManager::LoadVectorData()
 				std::cout << "vector [" << VectorVariableIndex << "]" <<"pushback value ("<< value<< ")" << std::endl;
 				tempVectorData.push_back(value);
 
-				//從檔案讀取字串
-				fin >> tempString;
 			}
 			
 		}
