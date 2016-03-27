@@ -50,12 +50,18 @@ public:
 	int getcolNum() { return colNum; }
 	int getrowNum() { return rowNum; }
 
+	void push_back(Vector value) { Data.push_back(value); }
+	void clear() { Data.clear(); }
+
+	void setDataAt(Vector myData,int index) { Data[index] = myData; }
+
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<Vector> myData) { Data = myData; }
 	void setcolNum(int mycolNum) { colNum = mycolNum; }
 	void setrowNum(int myrowNum) { rowNum = myrowNum; }
 
 	std::string print();
+	static double determine(Matrix M, int n);
 };
 
 //定義控管資料class

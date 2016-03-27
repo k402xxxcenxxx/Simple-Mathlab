@@ -425,6 +425,10 @@ double Vector::determine(std::vector<Vector> Vs, int n) {
 	return result;
 }
 
+//-------------------------------------------------------------------------------------------------------------------------------------------
+//matrix
+//-------------------------------------------------------------------------------------------------------------------------------------------
+
 std::string Matrix::print() {
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存
@@ -448,6 +452,47 @@ std::string Matrix::print() {
 	outputTemp += "]\n";
 
 	return outputTemp;
+}
+
+double Matrix::determine(Matrix M, int n) {
+	double result = 1;
+	//消成上三角
+	//對每一個做
+	for (int i = 0; i < n; i++) {
+		//要乘以的係數的基數
+		double base = M.getData()[i].getData()[i];
+
+		//向其下面的row做系數相減，使得最前面的係數為0
+		for (int j = i + 1; j < n; j++) {
+			//row要乘以的倍數
+			double scale = M.getData()[j].getData()[i] / base * -1;
+			Vector scaled = Vector::scale(M.getData()[i], scale);
+
+			//乘以倍數之後相減
+			M.setDataAt(Vector::add(M.getData()[j], scaled), j);
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		std::cout << "[";
+		for (int j = 0; j < n; j++) {
+			std::cout << M.getData()[i].getData()[j];
+			if (j != n - 1) {
+				std::cout << ",";
+			}
+		}
+		std::cout << "]";
+		if (i != n - 1) {
+			std::cout << "," <<std::endl;
+		}
+	}
+
+	//做完就可以用斜角相乘，得到determine
+	for (int i = 0; i < n; i++) {
+		result *= M.getData()[i].getData()[i];
+	}
+
+	return result;
 }
 
 

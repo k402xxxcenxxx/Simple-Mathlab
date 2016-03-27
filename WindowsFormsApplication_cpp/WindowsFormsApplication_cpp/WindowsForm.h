@@ -212,7 +212,6 @@ namespace WindowsFormsApplication_cpp {
 			// splitContainer1.Panel1
 			// 
 			this->splitContainer1->Panel1->Controls->Add(this->splitContainer2);
-			this->splitContainer1->Panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &WindowsForm::splitContainer1_Panel1_Paint);
 			// 
 			// splitContainer1.Panel2
 			// 
@@ -285,6 +284,7 @@ namespace WindowsFormsApplication_cpp {
 			this->MatrixList->Name = L"MatrixList";
 			this->MatrixList->Size = System::Drawing::Size(438, 308);
 			this->MatrixList->TabIndex = 5;
+			this->MatrixList->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &WindowsForm::MatrixList_MouseDoubleClick);
 			// 
 			// splitContainer3
 			// 
@@ -347,6 +347,7 @@ namespace WindowsFormsApplication_cpp {
 			this->VectorList->Size = System::Drawing::Size(424, 308);
 			this->VectorList->TabIndex = 3;
 			this->VectorList->SelectedIndexChanged += gcnew System::EventHandler(this, &WindowsForm::VectorList_SelectedIndexChanged);
+			this->VectorList->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &WindowsForm::VectorList_MouseDoubleClick);
 			// 
 			// groupBox1
 			// 
@@ -358,7 +359,6 @@ namespace WindowsFormsApplication_cpp {
 			this->groupBox1->TabIndex = 2;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"method";
-			this->groupBox1->Enter += gcnew System::EventHandler(this, &WindowsForm::groupBox1_Enter);
 			// 
 			// listBox1
 			// 
@@ -1035,6 +1035,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 		}
 		else if (userCommand[0] == "determine") {
 			//是否輸入超過兩個參數
+			//如果是做向量的determine，輸入的數量至少三個
 			if (userCommand->Length >= 3) {
 				//n = ?
 				int dimension = 0;
@@ -1093,19 +1094,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					finished = true;
 					
 				}
-				else if (!existInVector) {
-					//透過for迴圈，從矩陣資料中找出對應變數
-					for (unsigned int i = 0; i < matrices.size(); i++)
-					{
-
-						//若變數名稱與指令變數名稱符合
-						if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
-						{
-
-							break;
-						}
-					}
-				}
+				
 
 				if (finished && existInVector) {
 					std::cout << "determine vector" << std::endl;
@@ -1116,10 +1105,35 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 					Output->Text += "-Coming soon-" + Environment::NewLine;
 				}
 			}
-			else {
-				if (userCommand->Length < 3) {
-					Output->Text += "-Too less input for determine function-" + Environment::NewLine;
+			//如果是做矩陣的determine，則只會有兩個
+			else if(userCommand->Length == 2){
+				bool existInMatrices = false;
+				Matrix targetMatrix;
+
+				//透過for迴圈，從矩陣資料中找出對應變數
+				for (unsigned int i = 0; i < matrices.size(); i++)
+				{
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+					{
+						existInMatrices = true;
+						targetMatrix = matrices[i];
+						break;
+					}
 				}
+
+				if (existInMatrices) {
+					//還必須是n*n矩陣
+					if (targetMatrix.getcolNum() == targetMatrix.getrowNum()) {
+						Output->Text += "The determine of " + gcnew String(targetMatrix.getName().c_str()) + " = " + Matrix::determine(targetMatrix,targetMatrix.getcolNum()) + Environment::NewLine;
+					}
+					else {
+						Output->Text += "-Input matrix not a n*n matrix-" + Environment::NewLine;
+					}
+				}
+
+			}else if (userCommand->Length < 2) {
+				Output->Text += "-Too less input for determine function-" + Environment::NewLine;
 			}
 		}
 		//反之則判斷找不到指令
@@ -1228,14 +1242,18 @@ private: System::Void openFileDialog2_FileOk(System::Object^  sender, System::Co
 	}
 }
 
-
-private: System::Void splitContainer1_Panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
-}
-private: System::Void groupBox1_Enter(System::Object^  sender, System::EventArgs^  e) {
-}
-
 private: System::Void listBox1_DoubleClick(System::Object^  sender, System::EventArgs^  e) {
 	Input->Text += listBox1->SelectedItem->ToString() + " ";
+}
+private: System::Void VectorList_MouseDoubleClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	//取得向量資料
+	std::vector<Vector> vectors = dataManager->GetVectors();
+	Input->Text += gcnew String(vectors[VectorList->SelectedIndex].getName().c_str()) + " ";
+}
+private: System::Void MatrixList_MouseDoubleClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) {
+	//取得向量資料
+	std::vector<Matrix> matrices = dataManager->GetMatrices();
+	Input->Text += gcnew String(matrices[MatrixList->SelectedIndex].getName().c_str()) + " ";
 }
 };
 }
