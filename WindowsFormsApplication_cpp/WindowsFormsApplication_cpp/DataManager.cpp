@@ -348,6 +348,87 @@ double Vector::angle(Vector V1, Vector V2) {
 	return result;
 }
 
+double Vector::determine_slow(std::vector<Vector> Vs,int n) {
+	double result = 0;
+
+	if (n == 2) {
+		//ad - bc
+		double a = Vs[0].getData()[0];
+		double b = Vs[0].getData()[1];
+		double c = Vs[1].getData()[0];
+		double d = Vs[1].getData()[1];
+		result = a*d - b*c;
+	}
+	else {
+		std::vector<Vector> newVs;
+		Vector newV;
+
+		//計算每個位置的determine，加總
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++)
+			{
+				//基礎值
+				double base = Vs[i].getData()[j];
+				//std::cout << "base["<<i<<"]["<<j<<"] = " << Vs[i].getData()[j] << std::endl;
+				//std::cout << "matrix[" << i << "][" << j << "] = "<<std::endl;
+				//建立小一階的矩陣
+				for (int ii = 0; ii < n; ii++) {
+					//同row不算
+					if (ii != i) {
+						for (int jj = 0; jj < n; jj++) {
+							//同column不算
+							if (jj != j) {
+								//std::cout << Vs[ii].getData()[jj] << " ";
+								newV.push_back(Vs[ii].getData()[jj]);
+							}
+
+						}
+						//std::cout <<std::endl;
+						//一row存完、push進去
+						newVs.push_back(newV);
+						newV.clear();
+					}
+				}
+
+				//取得下一階determine
+				if((i * n + j) % 2 == 0)
+					result += base * -1 * Vector::determine(newVs, n - 1);
+				else
+					result += base * Vector::determine(newVs, n - 1);
+				newVs.clear();
+			}
+		}
+	}
+
+	return result;
+}
+
+double Vector::determine(std::vector<Vector> Vs, int n) {
+	double result = 1;
+
+	//消成上三角
+	//對每一個做
+	for (int i = 0; i < n; i++) {
+		//要乘以的係數的基數
+		double base = Vs[i].getData()[i];
+
+		//向其下面的row做系數相減，使得最前面的係數為0
+		for (int j = i + 1; j < n; j++) {
+			//row要乘以的倍數
+			double scale = Vs[j].getData()[i] / base;
+			//乘以倍數之後相減
+			Vs[j] = Vector::add(Vs[j],Vector::scale(Vs[i], -1 * scale));
+		}
+	}
+
+	//做完就可以用斜角相乘，得到determine
+	for (int i = 0; i < n; i++) {
+		result *= Vs[i].getData()[i];
+	}
+
+	return result;
+}
+
 std::string Matrix::print() {
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存
