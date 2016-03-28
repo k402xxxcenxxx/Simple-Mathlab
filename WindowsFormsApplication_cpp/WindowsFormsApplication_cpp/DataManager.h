@@ -78,6 +78,7 @@ public:
 	static Matrix multi(Matrix M1, Matrix M2);
 	static Matrix row_echelon(Matrix M);
 	static int rank(Matrix M);
+	static Matrix transpose(Matrix M);
 	static double determine(Matrix M, int n);
 };
 

@@ -171,10 +171,10 @@ bool DataManager::LoadMatrixData()
 				currentLoadMatrixID++;
 				//從檔案讀取字串，取得矩陣維度
 				fin >> tempString;
-				tempMatrixColNum = (int)strtod(tempString.c_str(), NULL);
+				tempMatrixRowNum = (int)strtod(tempString.c_str(), NULL);
 
 				fin >> tempString;
-				tempMatrixRowNum = (int)strtod(tempString.c_str(), NULL);
+				tempMatrixColNum = (int)strtod(tempString.c_str(), NULL);
 
 				tempMatrixColNum = tempMatrixColNum;
 
@@ -641,7 +641,27 @@ int Matrix::rank(Matrix M) {
 	return result;
 }
 
+Matrix Matrix::transpose(Matrix M) {
+	Matrix tempM;
+	Vector tempV;
 
+	int colNum = M.getrowNum();
+	int rowNum = M.getcolNum();
+
+	//由上做到下
+	//存結果
+	for (int i = 0; i < rowNum; i++) {
+		for (int j = 0; j < colNum; j++) {
+			tempV.push_back(M.getData()[j].getData()[i]);
+		}
+		tempM.push_back(tempV);
+		tempV.clear();
+	}
+
+	tempM.setcolNum(colNum);
+	tempM.setrowNum(rowNum);
+	return tempM;
+}
 
 double Matrix::determine(Matrix M, int n) {
 	double result = 1;

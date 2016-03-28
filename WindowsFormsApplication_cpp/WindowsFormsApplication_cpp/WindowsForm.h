@@ -365,9 +365,9 @@ namespace WindowsFormsApplication_cpp {
 			this->listBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 12;
-			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(15) {
+			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(16) {
 				L"print", L"dot", L"add", L"sub", L"scale", L"multi",
-					L"norm", L"normalize", L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis", L"rank"
+					L"norm", L"normalize", L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis", L"rank", L"transpose"
 			});
 			this->listBox1->Location = System::Drawing::Point(3, 18);
 			this->listBox1->Name = L"listBox1";
@@ -1429,6 +1429,44 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 			}
 			else if (userCommand->Length > 2) {
 				Output->Text += "-Too much input for determine function-" + Environment::NewLine;
+			}
+		}
+		else if (userCommand[0] == "transpose") {
+			//是否只輸入一個參數
+			if (userCommand->Length == 2) {
+
+				bool finished = false;
+				Matrix Mfirst;
+
+				//透過for迴圈，從矩陣資料中找出對應變數
+				for (unsigned int i = 0; i < matrices.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+					{
+						Mfirst = matrices[i];
+						finished = true;
+						break;
+					}
+				}
+
+				if (finished) {
+					
+					Output->Text += gcnew String(Mfirst.getName().c_str()) + " transpose = " + gcnew String(Matrix::transpose(Mfirst).print().c_str()) + Environment::NewLine;
+					
+				}
+				else {
+					Output->Text += "-Can't find matrix-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for add function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too few input for add function-" + Environment::NewLine;
+				}
 			}
 		}
 		//反之則判斷找不到指令
