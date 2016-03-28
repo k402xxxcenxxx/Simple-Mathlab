@@ -260,7 +260,42 @@ std::string Vector::print() {
 
 	return outputTemp;
 }
+double Vector::com(Vector V1, Vector V2) {
+	double result = 0;
+	double length = Vector::norm(V2);
+	double dot = Vector::dot(V1, V2);
 
+
+	result = dot / length;//How to call the"dot" in another function?
+	return result;
+
+}
+Vector Vector::proj(Vector V1, Vector V2) {
+
+	Vector result;
+
+	std::vector<double> tem;
+	double length = Vector::norm(V2);
+	double com = Vector::com(V1, V2);
+	for (int i = 0; i < V1.getData()[i]; i++) {
+		tem.push_back(V2.getData()[i] * com / length);
+	}
+
+	result.setData(tem);
+	return result;
+
+}
+bool Vector::paralell(Vector V1, Vector V2) {
+	bool result = true;
+	for (int i = V1.getData().size(); i = 0; i--) {
+		if (V1.getData()[i] / V2.getData()[i] != V1.getData()[i - 1] / V2.getData()[i - 1]) {
+			result = false;
+			break;
+		}
+
+	}
+	return result;
+}
 double Vector::dot(Vector V1, Vector V2) {
 	double result = 0;
 	for (int i = 0; i < V1.getData().size(); i++) {

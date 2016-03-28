@@ -154,10 +154,12 @@ namespace WindowsFormsApplication_cpp {
 			// 
 			// menuStrip2
 			// 
+			this->menuStrip2->ImageScalingSize = System::Drawing::Size(32, 32);
 			this->menuStrip2->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(1) { this->FileToolStripMenuItem });
 			this->menuStrip2->Location = System::Drawing::Point(0, 0);
 			this->menuStrip2->Name = L"menuStrip2";
-			this->menuStrip2->Size = System::Drawing::Size(502, 24);
+			this->menuStrip2->Padding = System::Windows::Forms::Padding(13, 4, 0, 4);
+			this->menuStrip2->Size = System::Drawing::Size(1088, 42);
 			this->menuStrip2->TabIndex = 1;
 			this->menuStrip2->Text = L"menuStrip2";
 			// 
@@ -168,20 +170,20 @@ namespace WindowsFormsApplication_cpp {
 					this->loadMatrixToolStripMenuItem
 			});
 			this->FileToolStripMenuItem->Name = L"FileToolStripMenuItem";
-			this->FileToolStripMenuItem->Size = System::Drawing::Size(38, 20);
+			this->FileToolStripMenuItem->Size = System::Drawing::Size(64, 34);
 			this->FileToolStripMenuItem->Text = L"File";
 			// 
 			// LoadVectorToolStripMenuItem
 			// 
 			this->LoadVectorToolStripMenuItem->Name = L"LoadVectorToolStripMenuItem";
-			this->LoadVectorToolStripMenuItem->Size = System::Drawing::Size(143, 22);
+			this->LoadVectorToolStripMenuItem->Size = System::Drawing::Size(247, 38);
 			this->LoadVectorToolStripMenuItem->Text = L"Load Vector";
 			this->LoadVectorToolStripMenuItem->Click += gcnew System::EventHandler(this, &WindowsForm::LoadVectorToolStripMenuItem_Click);
 			// 
 			// loadMatrixToolStripMenuItem
 			// 
 			this->loadMatrixToolStripMenuItem->Name = L"loadMatrixToolStripMenuItem";
-			this->loadMatrixToolStripMenuItem->Size = System::Drawing::Size(143, 22);
+			this->loadMatrixToolStripMenuItem->Size = System::Drawing::Size(247, 38);
 			this->loadMatrixToolStripMenuItem->Text = L"Load Matrix";
 			this->loadMatrixToolStripMenuItem->Click += gcnew System::EventHandler(this, &WindowsForm::loadMatrixToolStripMenuItem_Click);
 			// 
@@ -195,18 +197,20 @@ namespace WindowsFormsApplication_cpp {
 			this->tableLayoutPanel1->Controls->Add(this->splitContainer1, 0, 0);
 			this->tableLayoutPanel1->Controls->Add(this->groupBox1, 1, 0);
 			this->tableLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 24);
+			this->tableLayoutPanel1->Location = System::Drawing::Point(0, 42);
+			this->tableLayoutPanel1->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->tableLayoutPanel1->Name = L"tableLayoutPanel1";
 			this->tableLayoutPanel1->RowCount = 1;
 			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Percent, 100)));
-			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 671)));
-			this->tableLayoutPanel1->Size = System::Drawing::Size(502, 452);
+			this->tableLayoutPanel1->RowStyles->Add((gcnew System::Windows::Forms::RowStyle(System::Windows::Forms::SizeType::Absolute, 1342)));
+			this->tableLayoutPanel1->Size = System::Drawing::Size(1088, 910);
 			this->tableLayoutPanel1->TabIndex = 2;
 			// 
 			// splitContainer1
 			// 
 			this->splitContainer1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->splitContainer1->Location = System::Drawing::Point(3, 3);
+			this->splitContainer1->Location = System::Drawing::Point(7, 6);
+			this->splitContainer1->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->splitContainer1->Name = L"splitContainer1";
 			// 
 			// splitContainer1.Panel1
@@ -216,14 +220,16 @@ namespace WindowsFormsApplication_cpp {
 			// splitContainer1.Panel2
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->splitContainer3);
-			this->splitContainer1->Size = System::Drawing::Size(417, 446);
-			this->splitContainer1->SplitterDistance = 210;
+			this->splitContainer1->Size = System::Drawing::Size(904, 898);
+			this->splitContainer1->SplitterDistance = 455;
+			this->splitContainer1->SplitterWidth = 9;
 			this->splitContainer1->TabIndex = 1;
 			// 
 			// splitContainer2
 			// 
 			this->splitContainer2->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->splitContainer2->Location = System::Drawing::Point(0, 0);
+			this->splitContainer2->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->splitContainer2->Name = L"splitContainer2";
 			this->splitContainer2->Orientation = System::Windows::Forms::Orientation::Horizontal;
 			// 
@@ -234,18 +240,21 @@ namespace WindowsFormsApplication_cpp {
 			// splitContainer2.Panel2
 			// 
 			this->splitContainer2->Panel2->Controls->Add(this->groupBox4);
-			this->splitContainer2->Size = System::Drawing::Size(210, 446);
-			this->splitContainer2->SplitterDistance = 222;
+			this->splitContainer2->Size = System::Drawing::Size(455, 898);
+			this->splitContainer2->SplitterDistance = 446;
+			this->splitContainer2->SplitterWidth = 8;
 			this->splitContainer2->TabIndex = 6;
 			// 
 			// groupBox2
 			// 
 			this->groupBox2->Controls->Add(this->Output);
 			this->groupBox2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->groupBox2->Font = (gcnew System::Drawing::Font(L"Microsoft JhengHei", 9, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic))));
+			this->groupBox2->Font = (gcnew System::Drawing::Font(L"微軟正黑體", 9, static_cast<System::Drawing::FontStyle>((System::Drawing::FontStyle::Bold | System::Drawing::FontStyle::Italic))));
 			this->groupBox2->Location = System::Drawing::Point(0, 0);
+			this->groupBox2->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->groupBox2->Name = L"groupBox2";
-			this->groupBox2->Size = System::Drawing::Size(210, 222);
+			this->groupBox2->Padding = System::Windows::Forms::Padding(7, 6, 7, 6);
+			this->groupBox2->Size = System::Drawing::Size(455, 446);
 			this->groupBox2->TabIndex = 2;
 			this->groupBox2->TabStop = false;
 			this->groupBox2->Text = L"Output";
@@ -253,14 +262,15 @@ namespace WindowsFormsApplication_cpp {
 			// Output
 			// 
 			this->Output->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->Output->Font = (gcnew System::Drawing::Font(L"PMingLiU", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->Output->Font = (gcnew System::Drawing::Font(L"新細明體", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(136)));
-			this->Output->Location = System::Drawing::Point(3, 19);
+			this->Output->Location = System::Drawing::Point(7, 38);
+			this->Output->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->Output->Multiline = true;
 			this->Output->Name = L"Output";
 			this->Output->ReadOnly = true;
 			this->Output->ScrollBars = System::Windows::Forms::ScrollBars::Vertical;
-			this->Output->Size = System::Drawing::Size(204, 200);
+			this->Output->Size = System::Drawing::Size(441, 402);
 			this->Output->TabIndex = 1;
 			// 
 			// groupBox4
@@ -268,8 +278,10 @@ namespace WindowsFormsApplication_cpp {
 			this->groupBox4->Controls->Add(this->MatrixList);
 			this->groupBox4->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->groupBox4->Location = System::Drawing::Point(0, 0);
+			this->groupBox4->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->groupBox4->Name = L"groupBox4";
-			this->groupBox4->Size = System::Drawing::Size(210, 220);
+			this->groupBox4->Padding = System::Windows::Forms::Padding(7, 6, 7, 6);
+			this->groupBox4->Size = System::Drawing::Size(455, 444);
 			this->groupBox4->TabIndex = 6;
 			this->groupBox4->TabStop = false;
 			this->groupBox4->Text = L"MatrixList";
@@ -279,10 +291,11 @@ namespace WindowsFormsApplication_cpp {
 			this->MatrixList->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->MatrixList->FormattingEnabled = true;
 			this->MatrixList->HorizontalScrollbar = true;
-			this->MatrixList->ItemHeight = 12;
-			this->MatrixList->Location = System::Drawing::Point(3, 18);
+			this->MatrixList->ItemHeight = 24;
+			this->MatrixList->Location = System::Drawing::Point(7, 35);
+			this->MatrixList->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->MatrixList->Name = L"MatrixList";
-			this->MatrixList->Size = System::Drawing::Size(204, 199);
+			this->MatrixList->Size = System::Drawing::Size(441, 403);
 			this->MatrixList->TabIndex = 5;
 			this->MatrixList->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &WindowsForm::MatrixList_MouseDoubleClick);
 			// 
@@ -290,6 +303,7 @@ namespace WindowsFormsApplication_cpp {
 			// 
 			this->splitContainer3->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->splitContainer3->Location = System::Drawing::Point(0, 0);
+			this->splitContainer3->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->splitContainer3->Name = L"splitContainer3";
 			this->splitContainer3->Orientation = System::Windows::Forms::Orientation::Horizontal;
 			// 
@@ -300,8 +314,9 @@ namespace WindowsFormsApplication_cpp {
 			// splitContainer3.Panel2
 			// 
 			this->splitContainer3->Panel2->Controls->Add(this->groupBox5);
-			this->splitContainer3->Size = System::Drawing::Size(203, 446);
-			this->splitContainer3->SplitterDistance = 222;
+			this->splitContainer3->Size = System::Drawing::Size(440, 898);
+			this->splitContainer3->SplitterDistance = 446;
+			this->splitContainer3->SplitterWidth = 8;
 			this->splitContainer3->TabIndex = 1;
 			// 
 			// groupBox3
@@ -309,8 +324,10 @@ namespace WindowsFormsApplication_cpp {
 			this->groupBox3->Controls->Add(this->Input);
 			this->groupBox3->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->groupBox3->Location = System::Drawing::Point(0, 0);
+			this->groupBox3->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->groupBox3->Name = L"groupBox3";
-			this->groupBox3->Size = System::Drawing::Size(203, 222);
+			this->groupBox3->Padding = System::Windows::Forms::Padding(7, 6, 7, 6);
+			this->groupBox3->Size = System::Drawing::Size(440, 446);
 			this->groupBox3->TabIndex = 2;
 			this->groupBox3->TabStop = false;
 			this->groupBox3->Text = L"Input";
@@ -318,10 +335,11 @@ namespace WindowsFormsApplication_cpp {
 			// Input
 			// 
 			this->Input->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->Input->Location = System::Drawing::Point(3, 18);
+			this->Input->Location = System::Drawing::Point(7, 35);
+			this->Input->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->Input->Multiline = true;
 			this->Input->Name = L"Input";
-			this->Input->Size = System::Drawing::Size(197, 201);
+			this->Input->Size = System::Drawing::Size(426, 405);
 			this->Input->TabIndex = 1;
 			this->Input->TextChanged += gcnew System::EventHandler(this, &WindowsForm::Input_TextChanged);
 			// 
@@ -330,8 +348,10 @@ namespace WindowsFormsApplication_cpp {
 			this->groupBox5->Controls->Add(this->VectorList);
 			this->groupBox5->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->groupBox5->Location = System::Drawing::Point(0, 0);
+			this->groupBox5->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->groupBox5->Name = L"groupBox5";
-			this->groupBox5->Size = System::Drawing::Size(203, 220);
+			this->groupBox5->Padding = System::Windows::Forms::Padding(7, 6, 7, 6);
+			this->groupBox5->Size = System::Drawing::Size(440, 444);
 			this->groupBox5->TabIndex = 4;
 			this->groupBox5->TabStop = false;
 			this->groupBox5->Text = L"VectorList";
@@ -341,10 +361,11 @@ namespace WindowsFormsApplication_cpp {
 			this->VectorList->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->VectorList->FormattingEnabled = true;
 			this->VectorList->HorizontalScrollbar = true;
-			this->VectorList->ItemHeight = 12;
-			this->VectorList->Location = System::Drawing::Point(3, 18);
+			this->VectorList->ItemHeight = 24;
+			this->VectorList->Location = System::Drawing::Point(7, 35);
+			this->VectorList->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->VectorList->Name = L"VectorList";
-			this->VectorList->Size = System::Drawing::Size(197, 199);
+			this->VectorList->Size = System::Drawing::Size(426, 403);
 			this->VectorList->TabIndex = 3;
 			this->VectorList->SelectedIndexChanged += gcnew System::EventHandler(this, &WindowsForm::VectorList_SelectedIndexChanged);
 			this->VectorList->MouseDoubleClick += gcnew System::Windows::Forms::MouseEventHandler(this, &WindowsForm::VectorList_MouseDoubleClick);
@@ -353,9 +374,11 @@ namespace WindowsFormsApplication_cpp {
 			// 
 			this->groupBox1->Controls->Add(this->listBox1);
 			this->groupBox1->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->groupBox1->Location = System::Drawing::Point(426, 3);
+			this->groupBox1->Location = System::Drawing::Point(925, 6);
+			this->groupBox1->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->groupBox1->Name = L"groupBox1";
-			this->groupBox1->Size = System::Drawing::Size(73, 446);
+			this->groupBox1->Padding = System::Windows::Forms::Padding(7, 6, 7, 6);
+			this->groupBox1->Size = System::Drawing::Size(156, 898);
 			this->groupBox1->TabIndex = 2;
 			this->groupBox1->TabStop = false;
 			this->groupBox1->Text = L"method";
@@ -364,14 +387,16 @@ namespace WindowsFormsApplication_cpp {
 			// 
 			this->listBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->listBox1->FormattingEnabled = true;
-			this->listBox1->ItemHeight = 12;
-			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(16) {
+			this->listBox1->ItemHeight = 24;
+			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(19) {
 				L"print", L"dot", L"add", L"sub", L"scale", L"multi",
-					L"norm", L"normalize", L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis", L"rank", L"transpose"
+					L"norm", L"normalize", L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis", L"rank", L"transpose", L"paralell",
+					L"projection", L"component"
 			});
-			this->listBox1->Location = System::Drawing::Point(3, 18);
+			this->listBox1->Location = System::Drawing::Point(7, 35);
+			this->listBox1->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(67, 425);
+			this->listBox1->Size = System::Drawing::Size(142, 857);
 			this->listBox1->TabIndex = 0;
 			this->listBox1->DoubleClick += gcnew System::EventHandler(this, &WindowsForm::listBox1_DoubleClick);
 			// 
@@ -388,11 +413,12 @@ namespace WindowsFormsApplication_cpp {
 			// 
 			// WindowsForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 12);
+			this->AutoScaleDimensions = System::Drawing::SizeF(13, 24);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(502, 476);
+			this->ClientSize = System::Drawing::Size(1088, 952);
 			this->Controls->Add(this->tableLayoutPanel1);
 			this->Controls->Add(this->menuStrip2);
+			this->Margin = System::Windows::Forms::Padding(7, 6, 7, 6);
 			this->Name = L"WindowsForm";
 			this->Text = L"VectorExample";
 			this->Load += gcnew System::EventHandler(this, &WindowsForm::WindowsForm_Load);
