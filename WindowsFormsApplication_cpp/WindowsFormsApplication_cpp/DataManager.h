@@ -23,7 +23,8 @@ public:
 	std::string print();
 
 	static double dot(Vector V1, Vector V2);
-	static Vector add(Vector V1, Vector V2);
+	static Vector add(Vector V1, Vector V2, bool testTinyValue = false);
+	static Vector sub(Vector V1, Vector V2, bool testTinyValue = false);
 	static Vector scale(Vector V, double value);
 	static double norm(Vector V);
 	static Vector normalization(Vector V);
@@ -53,6 +54,16 @@ public:
 
 	void push_back(Vector value) { Data.push_back(value); }
 	void clear() { Data.clear(); }
+	void swapRow(int fromIndex, int toIndex) {
+		Vector tempV = Data[toIndex];
+		Data[toIndex] = Data[fromIndex];
+		Data[fromIndex] = tempV;
+	}
+	void moveRowToBottom(int Index) {
+		Vector tempV = Data.at(Index);
+		Data.erase(Data.begin() + Index);
+		Data.push_back(tempV);
+	}
 
 	void setDataAt(Vector myData,int index) { Data[index] = myData; }
 
@@ -62,6 +73,11 @@ public:
 	void setrowNum(int myrowNum) { rowNum = myrowNum; }
 
 	std::string print();
+	static Matrix add(Matrix M1, Matrix M2, bool testTinyValue = false);
+	static Matrix sub(Matrix M1, Matrix M2, bool testTinyValue = false);
+	static Matrix multi(Matrix M1, Matrix M2);
+	static Matrix row_echelon(Matrix M);
+	static int rank(Matrix M);
 	static double determine(Matrix M, int n);
 };
 

@@ -49,3 +49,16 @@ Temporary Items
 *.sdf
 *.suo
 *.suo
+*.suo
+*.exe
+*.metagen
+*.pdb
+*.opensdf
+*.sdf
+*.asm
+*.obj
+*.tlog
+*.lastbuildstate
+*.log
+*.Cache
+*.resx

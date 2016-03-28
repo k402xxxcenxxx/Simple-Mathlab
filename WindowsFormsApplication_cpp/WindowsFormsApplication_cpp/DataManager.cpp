@@ -270,12 +270,32 @@ double Vector::dot(Vector V1, Vector V2) {
 	return result;
 }
 
-Vector Vector::add(Vector V1, Vector V2) {
+Vector Vector::add(Vector V1, Vector V2, bool testTinyValue) {
 	Vector result;
 
 	std::vector<double> tempVector;
 	for (int i = 0; i < V1.getData().size(); i++) {
-		tempVector.push_back(V1.getData()[i] + V2.getData()[i]);
+
+		if (std::abs(V1.getData()[i] + V2.getData()[i]) < 1e-8 && testTinyValue)
+			tempVector.push_back(0);
+		else
+			tempVector.push_back(V1.getData()[i] + V2.getData()[i]);
+	}
+
+	result.setData(tempVector);
+	return result;
+}
+
+Vector Vector::sub(Vector V1, Vector V2, bool testTinyValue) {
+	Vector result;
+
+	std::vector<double> tempVector;
+	for (int i = 0; i < V1.getData().size(); i++) {
+
+		if (std::abs(V1.getData()[i] - V2.getData()[i]) < 1e-8 && testTinyValue)
+			tempVector.push_back(0);
+		else
+			tempVector.push_back(V1.getData()[i] - V2.getData()[i]);
 	}
 
 	result.setData(tempVector);
@@ -462,7 +482,7 @@ std::string Matrix::print() {
 		for (int k = 0; k < getcolNum(); k++)
 		{
 			std::string scalarString = std::to_string(getData()[j].getData()[k]);
-			outputTemp += scalarString.substr(0, scalarString.size() - 5);
+			outputTemp += scalarString.substr(0, scalarString.size());
 			if (k != getcolNum() - 1)
 				outputTemp += ",";
 		}
@@ -478,38 +498,157 @@ std::string Matrix::print() {
 	return outputTemp;
 }
 
-double Matrix::determine(Matrix M, int n) {
-	double result = 1;
-	//消成上三角
-	//對每一個做
-	for (int i = 0; i < n; i++) {
+Matrix Matrix::add(Matrix M1, Matrix M2, bool testTinyValue) {
+	Matrix result;
+	Vector tempV;
+
+	result.setrowNum(M1.getrowNum());
+	result.setcolNum(M1.getcolNum());
+
+	for (int i = 0; i < M1.getrowNum(); i++) {
+		tempV = Vector::add(M1.getData()[i], M2.getData()[i], testTinyValue);
+		result.push_back(tempV);
+	}
+	return result;
+}
+
+Matrix Matrix::sub(Matrix M1, Matrix M2, bool testTinyValue) {
+	Matrix result;
+	Vector tempV;
+
+	result.setrowNum(M1.getrowNum());
+	result.setcolNum(M1.getcolNum());
+
+	for (int i = 0; i < M1.getrowNum(); i++) {
+		tempV = Vector::sub(M1.getData()[i], M2.getData()[i], testTinyValue);
+		result.push_back(tempV);
+	}
+	return result;
+}
+
+Matrix Matrix::multi(Matrix M1, Matrix M2) {
+	Matrix result;
+	Vector tempV;
+	//a*b x b*c = a*c
+	result.setrowNum(M1.getrowNum());
+	result.setcolNum(M2.getcolNum());
+
+	//對最後結果要的每格作取值
+	//做每個row
+	for (int i = 0; i < M1.getrowNum(); i++) {
+		//做每個Col
+		for (int j = 0; j < M2.getcolNum(); j++) {
+			double value = 0;
+
+			//每個col都相乘
+			for (int col = 0; col < M1.getcolNum(); col++) {
+				value += M1.getData()[i].getData()[col] * M2.getData()[col].getData()[j];
+			}
+
+			tempV.push_back(value);
+		}
+		//一個row做完就push
+		result.push_back(tempV);
+		tempV.clear();
+	}
+
+	return result;
+}
+
+Matrix Matrix::row_echelon(Matrix M) {
+	int colNum = M.getcolNum();
+	int rowNum = M.getrowNum();
+	//由上做到下
+	for (int i = 0; i < rowNum; i++) {
 		//要乘以的係數的基數
 		double base = M.getData()[i].getData()[i];
+		std::cout << "base = " << base << std::endl;
+		//如果base是0，就換到最下面，檢查是否可以做
+		//測試次數，如果到底都沒有非零的數也要停下
+		int testTime = 1;
+		while (base == 0 && testTime + i < rowNum)
+		{
+			base = M.getData()[testTime + i].getData()[i];
+			std::cout << " base = " << base << std::endl;
+			testTime++;
+		}
 
-		//向其下面的row做系數相減，使得最前面的係數為0
-		for (int j = i + 1; j < n; j++) {
-			//row要乘以的倍數
-			double scale = M.getData()[j].getData()[i] / base * -1;
-			Vector scaled = Vector::scale(M.getData()[i], scale);
+		if (testTime > 1) {
+			M.swapRow(i, testTime - 1 + i);
+			//如果有交換，要乘-1
+			M.getData()[i] = Vector::scale(M.getData()[i], -1);
+		}
 
-			//乘以倍數之後相減
-			M.setDataAt(Vector::add(M.getData()[j], scaled), j);
+		if (base != 0) {
+			//向其下面的row做系數相減，使得最前面的係數為0
+			for (int j = i + 1; j < rowNum; j++) {
+				//row要乘以的倍數
+				double scale = M.getData()[j].getData()[i] / base;
+				std::cout << "--scale["<<j<<"]["<<i<<"] = " << scale << std::endl;
+				Vector scaled = Vector::scale(M.getData()[i], scale);
+
+				//乘以倍數之後相減
+				M.setDataAt(Vector::sub(M.getData()[j], scaled, true), j);
+			}
 		}
 	}
 
-	for (int i = 0; i < n; i++) {
+	for (int i = 0; i < rowNum; i++) {
 		std::cout << "[";
-		for (int j = 0; j < n; j++) {
+		for (int j = 0; j < colNum; j++) {
 			std::cout << M.getData()[i].getData()[j];
-			if (j != n - 1) {
+			if (j != colNum - 1) {
 				std::cout << ",";
 			}
 		}
 		std::cout << "]";
-		if (i != n - 1) {
-			std::cout << "," <<std::endl;
+		if (i != rowNum - 1) {
+			std::cout << "," << std::endl;
 		}
 	}
+
+	return M;
+}
+
+int Matrix::rank(Matrix M) {
+	int result = M.getrowNum();
+
+	int colNum = M.getcolNum();
+	int rowNum = M.getrowNum();
+
+	//改成上三角矩陣
+	M = Matrix::row_echelon(M);
+	//檢查是否一整個row為0
+	bool zeroRow = true;
+
+	for (int i = rowNum - 1; i >= 0; i--) {
+		for (int j = colNum - 1; j >= 0; j--) {
+			//只要掃到一個row不是零，就不用再掃了
+			if (M.getData()[i].getData()[j] != 0) {
+				zeroRow = false;
+				break;
+			}
+		}
+		if (zeroRow) {
+			result -= 1;
+		}
+		else {
+			//只要掃到一個row不是零，就不用再掃了
+			break;
+		}
+	}
+
+	return result;
+}
+
+
+
+double Matrix::determine(Matrix M, int n) {
+	double result = 1;
+	//消成上三角
+	//對每一個做
+
+	M = Matrix::row_echelon(M);
 
 	//做完就可以用斜角相乘，得到determine
 	for (int i = 0; i < n; i++) {
