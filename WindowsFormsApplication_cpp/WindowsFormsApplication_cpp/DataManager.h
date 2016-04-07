@@ -55,6 +55,10 @@ public:
 	int getcolNum() { return colNum; }
 	int getrowNum() { return rowNum; }
 
+	double get(int row, int column) {
+		return Data[row].getData()[column];
+	}
+
 	void push_back(Vector value) { Data.push_back(value); }
 	void clear() { Data.clear(); }
 	void swapRow(int fromIndex, int toIndex) {
@@ -69,6 +73,7 @@ public:
 	}
 
 	void setDataAt(Vector myData,int index) { Data[index] = myData; }
+	void setDataAt(double myData, int row,int column) { Data[row].getData()[column] = myData; }
 
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<Vector> myData) { Data = myData; }
@@ -83,6 +88,8 @@ public:
 	static int rank(Matrix M);
 	static Matrix transpose(Matrix M);
 	static double determine(Matrix M, int n);
+	static Matrix inverse_matrix(Matrix M,int n);
+	static Matrix adjoint(Matrix M, int n);
 };
 
 //定義控管資料class

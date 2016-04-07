@@ -713,4 +713,66 @@ double Matrix::determine(Matrix M, int n) {
 	return result;
 }
 
+Matrix Matrix::adjoint(Matrix M,int n) {
+	int colNum = M.getrowNum();
+	int rowNum = M.getcolNum();
+	Matrix resultM;
+	Vector resultTempV;
+	Matrix tempM;//降階的Matrix
+	Vector tempV;
 
+	//計算每個位置的determine
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+		{
+			//取得降階Mtrix
+			for (int ii = 0; ii < n; ii++) {
+				//同row不算
+				if (ii != i) {
+					for (int jj = 0; jj < n; jj++) {
+						//同column不算
+						if (jj != j) {
+							tempV.push_back(tempM.getData()[ii].getData()[jj]);
+						}
+
+					}
+					//一row存完、push進去
+					tempM.push_back(tempV);
+					tempV.clear();
+				}
+			}
+
+			resultTempV.push_back(Matrix::determine(tempM,n-1));
+			
+		}
+
+		resultM.push_back(resultTempV);
+		resultTempV.clear();
+	}
+
+	return resultM;
+}
+
+Matrix Matrix::inverse_matrix(Matrix M,int n) {
+	Matrix resultM;
+	Vector resultTempV;
+
+	double det = Matrix::determine(M, n);
+
+	if (det == 0) {
+		return ;
+	}
+
+	resultM = Matrix::adjoint(M, n);
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+		{
+			resultM.setDataAt(1 / det * resultM.get(i,j) , i , j);
+		}
+	}
+
+	resultM = Matrix::transpose(resultM);
+
+	return resultM;
+}
