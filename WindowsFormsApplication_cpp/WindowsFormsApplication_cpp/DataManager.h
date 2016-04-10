@@ -114,7 +114,7 @@ public:
 	static Matrix inverse_matrix(Matrix M,int n);
 	static Matrix adjoint(Matrix M, int n);
 	static Matrix LS_method(Matrix M1,Matrix M2);
-
+	static Matrix linear(Matrix A, Matrix B);
 };
 
 //定義控管資料class

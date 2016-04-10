@@ -1601,7 +1601,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 						Output->Text += "least square of" + gcnew String(Mfirst.getName().c_str()) + " & " + gcnew String(Msecond.getName().c_str()) + " = " + gcnew String(Matrix::LS_method(Mfirst, Msecond).print().c_str()) + Environment::NewLine;
 					}
 					else {
-						Output->Text += gcnew String(Mfirst.getName().c_str()) + " & " + gcnew String(Msecond.getName().c_str()) + "can't do multi" + Environment::NewLine;
+						Output->Text += gcnew String(Mfirst.getName().c_str()) + " & " + gcnew String(Msecond.getName().c_str()) + "can't do ls" + Environment::NewLine;
 					}
 				}
 				else {
@@ -1610,10 +1610,68 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 			}
 			else {
 				if (userCommand->Length > 3) {
-					Output->Text += "-Too much input for add function-" + Environment::NewLine;
+					Output->Text += "-Too much input for ls function-" + Environment::NewLine;
 				}
 				else if (userCommand->Length < 3) {
-					Output->Text += "-Too few input for add function-" + Environment::NewLine;
+					Output->Text += "-Too few input for ls function-" + Environment::NewLine;
+				}
+			}
+		}
+		else if (userCommand[0] == "linear") {
+			//是否只輸入兩個參數
+			if (userCommand->Length == 3) {
+
+				bool existInMatrix = false;
+				bool finished = false;
+				Matrix Mfirst;
+				Matrix Msecond;
+
+				//透過for迴圈，從矩陣資料中找出對應變數
+				for (unsigned int i = 0; i < matrices.size(); i++)
+				{
+
+					//若變數名稱與指令變數名稱符合
+					if (userCommand[1] == gcnew String(matrices[i].getName().c_str()))
+					{
+						Mfirst = matrices[i];
+						existInMatrix = true;
+						break;
+					}
+				}
+
+				if (existInMatrix) {
+					//透過for迴圈，從矩陣資料中找出對應變數
+					for (unsigned int i = 0; i < matrices.size(); i++)
+					{
+						//若變數名稱與指令變數名稱符合
+						if (userCommand[2] == gcnew String(matrices[i].getName().c_str()))
+						{
+							Msecond = matrices[i];
+							finished = true;
+							break;
+						}
+					}
+				}
+
+				if (finished && existInMatrix) {
+					if (Mfirst.getrowNum() == Msecond.getrowNum()) {
+
+						Output->Text += "X = " + gcnew String(Matrix::linear(Mfirst, Msecond).print().c_str()) + Environment::NewLine;
+					}
+					else {
+						Output->Text += gcnew String(Mfirst.getName().c_str()) + " & " + gcnew String(Msecond.getName().c_str()) + "can't solve linear system" + Environment::NewLine;
+					}
+				}
+				else {
+					Output->Text += "-Coming soon-" + Environment::NewLine;
+				}
+			}
+			else {
+				if (userCommand->Length > 3) {
+					Output->Text += "-Too much input for solve linear function-" + Environment::NewLine;
+				}
+				else if (userCommand->Length < 3) {
+					Output->Text += "-Too few input for solve linear function-" + Environment::NewLine;
 				}
 			}
 		}

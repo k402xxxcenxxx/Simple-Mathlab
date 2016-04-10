@@ -846,3 +846,13 @@ Matrix Matrix::LS_method(Matrix M1,Matrix M2) {
 
 
 }
+
+Matrix Matrix::linear(Matrix A, Matrix B) {
+	Matrix resultM = Matrix(A.getrowNum(), 1);
+
+	Matrix inverseA = Matrix::inverse_matrix(A,A.getcolNum());
+
+	resultM.setData((Matrix::multi( inverseA,B)).getData());
+	return resultM;
+
+}
