@@ -619,7 +619,7 @@ Matrix Matrix::row_echelon(Matrix M) {
 			for (int j = i + 1; j < rowNum; j++) {
 				//row要乘以的倍數
 				double scale = M.getData()[j].getData()[i] / base;
-				std::cout << "--scale["<<j<<"]["<<i<<"] = " << scale << std::endl;
+				//std::cout << "--scale["<<j<<"]["<<i<<"] = " << scale << std::endl;
 				Vector scaled = Vector::scale(M.getData()[i], scale);
 
 				//乘以倍數之後相減
@@ -732,7 +732,7 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 					for (int jj = 0; jj < n; jj++) {
 						//同column不算
 						if (jj != j) {
-							tempV.push_back(tempM.getData()[ii].getData()[jj]);
+							tempV.push_back(M.getData()[ii].getData()[jj]);
 						}
 
 					}
@@ -741,14 +741,27 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 					tempV.clear();
 				}
 			}
+			tempM.setcolNum(n - 1);
+			tempM.setrowNum(n - 1);
 
-			resultTempV.push_back(Matrix::determine(tempM,n-1));
 			
+			double det = Matrix::determine(tempM, n - 1);
+
+			if ((i * n + j) % 2 == 1)
+				det *= -1;
+
+			resultTempV.push_back(det);
+			tempM.clear();
 		}
 
 		resultM.push_back(resultTempV);
 		resultTempV.clear();
 	}
+
+	resultM.setcolNum(n);
+	resultM.setrowNum(n);
+
+	resultM.setData(Matrix::transpose(resultM).getData());
 
 	return resultM;
 }
@@ -759,9 +772,6 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 
 	double det = Matrix::determine(M, n);
 
-	if (det == 0) {
-		return ;
-	}
 
 	resultM = Matrix::adjoint(M, n);
 
