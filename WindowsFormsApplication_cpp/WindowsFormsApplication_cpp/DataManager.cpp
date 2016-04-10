@@ -793,3 +793,15 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 	return resultM;
 }
 
+Matrix Matrix::LS_method(Matrix M1,Matrix M2) {
+	Matrix resultM;
+	resultM = Matrix::transpose(M1);
+	resultM = Matrix::multi(resultM, M1);
+	resultM = Matrix::inverse_matrix(resultM,int n);
+	resultM = Matrix::multi(resultM, Matrix::transpose(M1));
+	resultM = Matrix::multi(resultM, M2);
+
+	return resultM;
+
+
+}
