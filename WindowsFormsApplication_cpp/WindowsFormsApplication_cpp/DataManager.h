@@ -18,6 +18,7 @@ public:
 
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<double> myData) { Data = myData; }
+	void setDataAt(double myData,int index) { Data[index] = myData; }
 
 	void push_back(double value) { Data.push_back(value); }
 	void clear() { Data.clear(); }
@@ -87,7 +88,7 @@ public:
 	}
 
 	void setDataAt(Vector myData,int index) { Data[index] = myData; }
-	void setDataAt(double myData, int row,int column) { Data[row].getData()[column] = myData; }
+	void setDataAt(double myData, int row,int column) { Data[row].setDataAt(myData ,column); }
 
 	void setName(std::string myName) { Name = myName; }
 	void setData(std::vector<Vector> myData) { Data = myData; }

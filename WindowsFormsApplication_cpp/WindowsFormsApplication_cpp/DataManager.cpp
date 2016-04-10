@@ -603,6 +603,8 @@ Matrix Matrix::multi(Matrix M1, Matrix M2) {
 Matrix Matrix::row_echelon(Matrix M) {
 	int colNum = M.getcolNum();
 	int rowNum = M.getrowNum();
+
+	int swapTime = 0;
 	//パ暗
 	for (int i = 0; i < rowNum; i++) {
 		//璶玒计膀计
@@ -621,7 +623,8 @@ Matrix Matrix::row_echelon(Matrix M) {
 		if (testTime > 1) {
 			M.swapRow(i, testTime - 1 + i);
 			//狦Τユ传璶-1
-			M.getData()[i] = Vector::scale(M.getData()[i], -1);
+			swapTime++;
+			//M.getData()[i] = Vector::scale(M.getData()[i], -1);
 		}
 
 		if (base != 0) {
@@ -699,12 +702,53 @@ double Matrix::determine(Matrix M, int n) {
 	double result = 1;
 	//Θà
 	//癸–暗
+	int colNum = M.getcolNum();
+	int rowNum = M.getrowNum();
 
-	M = Matrix::row_echelon(M);
+	int swapTime = 0;
+	//パ暗
+	for (int i = 0; i < rowNum; i++) {
+		//璶玒计膀计
+		double base = M.getData()[i].getData()[i];
+		//std::cout << "base = " << base << std::endl;
+		//狦base琌0碞传程浪琩琌暗
+		//代刚Ω计狦┏常⊿Τ獶箂计璶氨
+		int testTime = 1;
+		while (base == 0 && testTime + i < rowNum)
+		{
+			base = M.getData()[testTime + i].getData()[i];
+			//std::cout << " base = " << base << std::endl;
+			testTime++;
+		}
+
+		if (testTime > 1) {
+			M.swapRow(i, testTime - 1 + i);
+			//狦Τユ传璶-1
+			swapTime++;
+			//M.getData()[i] = Vector::scale(M.getData()[i], -1);
+		}
+
+		if (base != 0) {
+			//ㄤrow暗╰计搭ㄏ眔程玡玒计0
+			for (int j = i + 1; j < rowNum; j++) {
+				//row璶计
+				double scale = M.getData()[j].getData()[i] / base;
+				//std::cout << "--scale["<<j<<"]["<<i<<"] = " << scale << std::endl;
+				Vector scaled = Vector::scale(M.getData()[i], scale);
+
+				//计ぇ搭
+				M.setDataAt(Vector::sub(M.getData()[j], scaled, true), j);
+			}
+		}
+	}
 
 	//暗Ч碞ノ弊à眔determine
 	for (int i = 0; i < n; i++) {
 		result *= M.getData()[i].getData()[i];
+	}
+
+	for (int i = 0; i < swapTime; i++) {
+		result *= -1;
 	}
 
 	return result;
@@ -761,6 +805,7 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 
 Matrix Matrix::inverse_matrix(Matrix M,int n) {
 	Matrix resultM = Matrix(n,n);
+	Matrix tempM = Matrix(n, n);
 	Vector resultTempV;
 	double det = Matrix::determine(M, n);
 
@@ -771,13 +816,17 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 		return resultM;
 	}
 
-	det = (float)det;
-	resultM = Matrix::adjoint(M, n);
+	std::cout <<"det : "<< det << std::endl;
+
+	tempM = Matrix::adjoint(M, n);
+	resultM = tempM;
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++)
 		{
-			resultM.setDataAt(1 / det * resultM.get(i,j) , i , j);
+			double data = tempM.get(i, j);
+			std::cout << "data : " << data << std::endl;
+			resultM.setDataAt(data / det , i , j);
 		}
 	}
 
