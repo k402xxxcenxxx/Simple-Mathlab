@@ -89,7 +89,7 @@ public:
 	static int rank(Matrix M);
 	static Matrix transpose(Matrix M);
 	static double determine(Matrix M, int n);
-	static Matrix inverse_matrix(Matrix M,int n);
+	static Matrix inverse_matrix(Matrix M,int n,double det);
 	static Matrix adjoint(Matrix M, int n);
 	static Matrix LS_method(Matrix M1,Matrix M2);
 

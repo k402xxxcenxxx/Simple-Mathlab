@@ -604,14 +604,14 @@ Matrix Matrix::row_echelon(Matrix M) {
 	for (int i = 0; i < rowNum; i++) {
 		//璶玒计膀计
 		double base = M.getData()[i].getData()[i];
-		std::cout << "base = " << base << std::endl;
+		//std::cout << "base = " << base << std::endl;
 		//狦base琌0碞传程浪琩琌暗
 		//代刚Ω计狦┏常⊿Τ獶箂计璶氨
 		int testTime = 1;
 		while (base == 0 && testTime + i < rowNum)
 		{
 			base = M.getData()[testTime + i].getData()[i];
-			std::cout << " base = " << base << std::endl;
+			//std::cout << " base = " << base << std::endl;
 			testTime++;
 		}
 
@@ -635,19 +635,6 @@ Matrix Matrix::row_echelon(Matrix M) {
 		}
 	}
 
-	for (int i = 0; i < rowNum; i++) {
-		std::cout << "[";
-		for (int j = 0; j < colNum; j++) {
-			std::cout << M.getData()[i].getData()[j];
-			if (j != colNum - 1) {
-				std::cout << ",";
-			}
-		}
-		std::cout << "]";
-		if (i != rowNum - 1) {
-			std::cout << "," << std::endl;
-		}
-	}
 
 	return M;
 }
@@ -773,11 +760,9 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 	return resultM;
 }
 
-Matrix Matrix::inverse_matrix(Matrix M,int n) {
+Matrix Matrix::inverse_matrix(Matrix M,int n,double det) {
 	Matrix resultM;
 	Vector resultTempV;
-
-	double det = Matrix::determine(M, n);
 
 	resultM = Matrix::adjoint(M, n);
 
@@ -788,8 +773,6 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 		}
 	}
 
-	resultM = Matrix::transpose(resultM);
-
 	return resultM;
 }
 
@@ -797,7 +780,7 @@ Matrix Matrix::LS_method(Matrix M1,Matrix M2) {
 	Matrix resultM;
 	resultM = Matrix::transpose(M1);
 	resultM = Matrix::multi(resultM, M1);
-	resultM = Matrix::inverse_matrix(resultM,int n);
+	resultM = Matrix::inverse_matrix(resultM, resultM.getcolNum(),Matrix::determine(resultM,resultM.getcolNum()));
 	resultM = Matrix::multi(resultM, Matrix::transpose(M1));
 	resultM = Matrix::multi(resultM, M2);
 
