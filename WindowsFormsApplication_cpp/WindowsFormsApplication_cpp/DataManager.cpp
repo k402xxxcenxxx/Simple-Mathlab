@@ -385,6 +385,13 @@ Vector Vector::crossProduct(Vector V1, Vector V2) {
 
 	return result;
 }
+double Vector::triangle_area(Vector V1,Vector V2) {
+	Vector tempV = Vector::crossProduct(V1, V2);
+	double det = Vector::norm(tempV);
+	double result = 0.5*det;
+	return result;
+
+}
 
 Vector Vector::planeNormal(Vector V1, Vector V2) {
 	return crossProduct(V1, V2);
@@ -772,7 +779,6 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 
 	double det = Matrix::determine(M, n);
 
-
 	resultM = Matrix::adjoint(M, n);
 
 	for (int i = 0; i < n; i++) {
@@ -786,3 +792,4 @@ Matrix Matrix::inverse_matrix(Matrix M,int n) {
 
 	return resultM;
 }
+

@@ -32,6 +32,7 @@ public:
 	static Vector crossProduct(Vector V1, Vector V2);
 	static Vector planeNormal(Vector V1, Vector V2);
 	static double angle(Vector V1, Vector V2);
+	static double triangle_area(Vector V1, Vector V2);
 	static double determine_slow(std::vector<Vector> Vs, int n);//由手算的方式算得的，會超慢，基本上跑不出結果
 	static double determine(std::vector<Vector> Vs,int n);
 	static std::vector<Vector> basis(std::vector<Vector> Vs, int n);
