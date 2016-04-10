@@ -516,6 +516,12 @@ std::vector<Vector> Vector::basis(std::vector<Vector> Vs, int n) {
 //-------------------------------------------------------------------------------------------------------------------------------------------
 
 std::string Matrix::print() {
+
+	if (isErrorMatrix()) {
+		std::string outputTemp = "error";
+		return outputTemp;
+	}
+
 	std::string outputTemp = " [";
 	//將輸出資料存入暫存
 	for (int j = 0; j < getrowNum(); j++)
@@ -541,7 +547,7 @@ std::string Matrix::print() {
 }
 
 Matrix Matrix::add(Matrix M1, Matrix M2, bool testTinyValue) {
-	Matrix result;
+	Matrix result = Matrix(M1.getrowNum(),M2.getcolNum());
 	Vector tempV;
 
 	result.setrowNum(M1.getrowNum());
@@ -555,11 +561,8 @@ Matrix Matrix::add(Matrix M1, Matrix M2, bool testTinyValue) {
 }
 
 Matrix Matrix::sub(Matrix M1, Matrix M2, bool testTinyValue) {
-	Matrix result;
+	Matrix result = Matrix(M1.getrowNum(),M1.getcolNum());
 	Vector tempV;
-
-	result.setrowNum(M1.getrowNum());
-	result.setcolNum(M1.getcolNum());
 
 	for (int i = 0; i < M1.getrowNum(); i++) {
 		tempV = Vector::sub(M1.getData()[i], M2.getData()[i], testTinyValue);
@@ -569,7 +572,7 @@ Matrix Matrix::sub(Matrix M1, Matrix M2, bool testTinyValue) {
 }
 
 Matrix Matrix::multi(Matrix M1, Matrix M2) {
-	Matrix result;
+	Matrix result = Matrix(M1.getrowNum(),M2.getcolNum());
 	Vector tempV;
 	//a*b x b*c = a*c
 	result.setrowNum(M1.getrowNum());
@@ -671,7 +674,7 @@ int Matrix::rank(Matrix M) {
 }
 
 Matrix Matrix::transpose(Matrix M) {
-	Matrix tempM;
+	Matrix tempM = Matrix(M.getrowNum(),M.getcolNum());
 	Vector tempV;
 
 	int colNum = M.getrowNum();
@@ -710,9 +713,9 @@ double Matrix::determine(Matrix M, int n) {
 Matrix Matrix::adjoint(Matrix M,int n) {
 	int colNum = M.getrowNum();
 	int rowNum = M.getcolNum();
-	Matrix resultM;
+	Matrix resultM = Matrix(n,n);
 	Vector resultTempV;
-	Matrix tempM;//降階的Matrix
+	Matrix tempM = Matrix(n-1,n-1);//降階的Matrix
 	Vector tempV;
 
 	//計算每個位置的determine
@@ -735,13 +738,9 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 					tempV.clear();
 				}
 			}
-			tempM.setcolNum(n - 1);
-			tempM.setrowNum(n - 1);
-
-			
 			double det = Matrix::determine(tempM, n - 1);
 
-			if ((i * n + j) % 2 == 1)
+			if ((i + j) % 2 == 1)
 				det *= -1;
 
 			resultTempV.push_back(det);
@@ -760,10 +759,19 @@ Matrix Matrix::adjoint(Matrix M,int n) {
 	return resultM;
 }
 
-Matrix Matrix::inverse_matrix(Matrix M,int n,double det) {
-	Matrix resultM;
+Matrix Matrix::inverse_matrix(Matrix M,int n) {
+	Matrix resultM = Matrix(n,n);
 	Vector resultTempV;
+	double det = Matrix::determine(M, n);
 
+	if (det == 0) {
+		resultM.setcolNum(0);
+		resultM.setrowNum(0);
+
+		return resultM;
+	}
+
+	det = (float)det;
 	resultM = Matrix::adjoint(M, n);
 
 	for (int i = 0; i < n; i++) {
@@ -777,10 +785,11 @@ Matrix Matrix::inverse_matrix(Matrix M,int n,double det) {
 }
 
 Matrix Matrix::LS_method(Matrix M1,Matrix M2) {
-	Matrix resultM;
+	Matrix resultM = Matrix(M2.getrowNum(),M2.getcolNum());
+
 	resultM = Matrix::transpose(M1);
 	resultM = Matrix::multi(resultM, M1);
-	resultM = Matrix::inverse_matrix(resultM, resultM.getcolNum(),Matrix::determine(resultM,resultM.getcolNum()));
+	resultM = Matrix::inverse_matrix(resultM, resultM.getcolNum());
 	resultM = Matrix::multi(resultM, Matrix::transpose(M1));
 	resultM = Matrix::multi(resultM, M2);
 

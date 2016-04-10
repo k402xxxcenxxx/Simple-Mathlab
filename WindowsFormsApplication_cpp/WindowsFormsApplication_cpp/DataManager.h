@@ -11,6 +11,8 @@ private:
 	std::string Name;
 	std::vector<double> Data;
 public:
+
+
 	std::string getName() { return Name; }
 	std::vector<double> getData() { return Data; }
 
@@ -50,6 +52,17 @@ private:
 	int colNum;
 	int rowNum;
 public:
+	
+	Matrix() {
+		colNum = 0;
+		rowNum = 0;
+	}
+
+	Matrix(int row,int col) {
+		colNum = col;
+		rowNum = row;
+	}
+
 	std::string getName() { return Name; }
 	std::vector<Vector> getData() { return Data; }
 	Vector getData(int rowNum) { return Data.at(rowNum); }
@@ -81,6 +94,14 @@ public:
 	void setcolNum(int mycolNum) { colNum = mycolNum; }
 	void setrowNum(int myrowNum) { rowNum = myrowNum; }
 
+	bool isErrorMatrix() {
+		if (rowNum == 0 && colNum == 0) {
+			return true;
+		}
+		else
+			return false;
+	}
+
 	std::string print();
 	static Matrix add(Matrix M1, Matrix M2, bool testTinyValue = false);
 	static Matrix sub(Matrix M1, Matrix M2, bool testTinyValue = false);
@@ -89,7 +110,7 @@ public:
 	static int rank(Matrix M);
 	static Matrix transpose(Matrix M);
 	static double determine(Matrix M, int n);
-	static Matrix inverse_matrix(Matrix M,int n,double det);
+	static Matrix inverse_matrix(Matrix M,int n);
 	static Matrix adjoint(Matrix M, int n);
 	static Matrix LS_method(Matrix M1,Matrix M2);
 

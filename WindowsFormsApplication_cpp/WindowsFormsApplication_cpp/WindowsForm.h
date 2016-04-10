@@ -376,10 +376,10 @@ namespace WindowsFormsApplication_cpp {
 			this->listBox1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->listBox1->FormattingEnabled = true;
 			this->listBox1->ItemHeight = 12;
-			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(21) {
+			this->listBox1->Items->AddRange(gcnew cli::array< System::Object^  >(22) {
 				L"print", L"dot", L"add", L"sub", L"scale", L"multi",
 					L"norm", L"normalize", L"isOrthogonal", L"angle", L"cross", L"planeNormal", L"determine", L"basis", L"rank", L"transpose", L"paralell",
-					L"projection", L"component", L"adjoint", L"inverse"
+					L"projection", L"component", L"adjoint", L"inverse", L"leastSquare"
 			});
 			this->listBox1->Location = System::Drawing::Point(7, 21);
 			this->listBox1->Name = L"listBox1";
@@ -1539,14 +1539,8 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 
 				if (existInMatrices) {
 					if (targetMatrix.getcolNum() == targetMatrix.getrowNum()) {
-						double det = Matrix::determine(targetMatrix, targetMatrix.getcolNum());
-
-						if (det != 0) {
-							Output->Text += "The inverse matrix is " + gcnew String(targetMatrix.getName().c_str()) + " = " + gcnew String(Matrix::inverse_matrix(targetMatrix, targetMatrix.getcolNum(),det).print().c_str()) + Environment::NewLine;
-						}
-						else {
-							Output->Text += "-determine is 0-" + Environment::NewLine;
-						}
+							Output->Text += "The inverse matrix is " + gcnew String(targetMatrix.getName().c_str()) + " = " + gcnew String(Matrix::inverse_matrix(targetMatrix, targetMatrix.getcolNum()).print().c_str()) + Environment::NewLine;
+						
 						
 					}
 					else
@@ -1602,7 +1596,7 @@ private: System::Void Input_TextChanged(System::Object^  sender, System::EventAr
 				}
 
 				if (finished && existInMatrix) {
-					if (Mfirst.getcolNum() == Msecond.getrowNum()) {
+					if (Mfirst.getrowNum() == Msecond.getrowNum()) {
 
 						Output->Text += "least square of" + gcnew String(Mfirst.getName().c_str()) + " & " + gcnew String(Msecond.getName().c_str()) + " = " + gcnew String(Matrix::LS_method(Mfirst, Msecond).print().c_str()) + Environment::NewLine;
 					}
